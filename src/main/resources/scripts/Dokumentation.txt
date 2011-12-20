@@ -1,0 +1,64 @@
+<html>
+<b>Inhalt:</b>
+<br>
+Berechnung und Darstellung von Teilbereichen der Graphentheorie.<p>
+		
+<b>Programminhalt:</b><br>
++ Adjazenzmatrix<br>
++ Graphische Darstellung<br>
++ Wegmatrix<br>
++ Distanzmatrix<br>
++ Exzentrizitäten<br>
++ Radius<br>
++ Durchmesser<br>
++ Zentrum<br>
++ Komponenten<br>
++ Artikulationen<br>
++ Brücken<br>
++ Blöcke<br>
++ Baum<br>
++ Euler'sche Linie<p>
+
+<b>Adjazenzmatrix:</b><br>
+Matrix zur Eingabe von ungerichteten Kanten, welche zur weiteren Berechnung herangezogen werden. Die Diagonale ist auf 0 gesetzt und somit sind Knoten mit Schlingen nicht möglich.<p>
+
+<b>Graphische Darstellung:</b><br>
+Mittels der JUNG-Java-Bibliothek wird der in der Adjazenzmatrix eingegebene Graph visualisiert.<p>
+		
+<b>Wegmatrix:</b><br>
+Enthält als Werte nur 0 oder 1 und besagt, ob es einen Weg von einem beliebigen Knoten x zu einem beliebigen Knoten y gibt.<p>
+
+<b>Distanzmatrix:</b><br>
+Liefert mir die Information darüber, in wievielen Schritten ein beliebiger Knoten x zu einem beliebigen Knoten y erreicht werden kann.<p>
+
+<b>Exzentrizitäten:</b><br>
+Ist der jeweils größte Wert eines Knoten in der Distanzmatrix und besagt, in wievielen Schritten man vom jeweiligen Knoten maximal braucht um zu einem anderen Knoten zu gelangen.<p>
+
+<b>Radius:</b><br>
+Ist die kleinste Exzentrizität.<p>
+
+<b>Durchmesser:</b><br>
+Ist die größte Exzentrizität.<p>
+
+<b>Zentrum:</b><br>
+Sind die Knoten, welche die kleinste Exzentrizität aufweisen.<p>
+
+<b>Komponenten:</b><br>
+Eine Komponente ist ein Teilgraph.<p>
+
+<b>Artikulationen:</b><br>
+Sind Knoten, wo bei Wegnahme eines solchen Knotens der Graph in mehr Komponenten zerfällt als er vorher Komponenten hatte.<p>
+
+<b>Brücken:</b><br>
+Sind Kanten, wo bei Wegnahme einer solchen Kante der Graph in mehr Komponenten zerfällt als er vorher Komponenten hatte.<p>
+
+<b>Blöcke:</b><br>
+Ist ein zusammenhängender Graph ohne Artikulationen.<p>
+
+<b>Baum:</b><br>
+Ein kreisloser Graph ist ein Baum.<p>
+
+<b>Euler'sche Linie:</b><br>
+Ein Weg wo alle Kanten einmal durchlaufen werden.<p>
+
+</html>
