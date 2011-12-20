@@ -55,7 +55,7 @@ public class MainFrame extends JFrame {
 
 		try {
 			Image icon = Toolkit.getDefaultToolkit().getImage(
-					File.class.getResource("/app.png"));
+					File.class.getResource("/icons/app.png"));
 			setIconImage(icon);
 		} catch (Exception e) {
 		}
@@ -141,7 +141,7 @@ public class MainFrame extends JFrame {
 		calculationToolbar.add(refreshButton, ", gapx 5, w 100");
 
 		JButton exitButton = new JButton(new ImageIcon(getClass().getResource(
-				"/exit2.png")));
+				"/icons/exit2.png")));
 		exitButton.setOpaque(false);
 		calculationToolbar.add(exitButton, "gapx 5");
 		exitButton.addActionListener(new ActionListener() {
@@ -158,7 +158,7 @@ public class MainFrame extends JFrame {
 		calculationToolbar.add(label, "gapx 35");
 
 		JButton openButton = new JButton(new ImageIcon(getClass().getResource(
-				"/open.png")));
+				"/icons/open.png")));
 		openButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -191,7 +191,7 @@ public class MainFrame extends JFrame {
 		calculationToolbar.add(openButton, "gapx 20");
 
 		JButton saveButton = new JButton(new ImageIcon(getClass().getResource(
-				"/save.png")));
+				"/icons/save.png")));
 		saveButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -216,7 +216,7 @@ public class MainFrame extends JFrame {
 		calculationToolbar.add(saveButton, "gapx 2");
 
 		JButton infoButton = new JButton(new ImageIcon(getClass().getResource(
-				"/info2.png")));
+				"/icons/info2.png")));
 		infoButton.setOpaque(false);
 		calculationToolbar.add(infoButton, "gapx 2");
 		infoButton.addActionListener(new ActionListener() {

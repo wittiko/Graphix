@@ -27,7 +27,7 @@ public class DocuPanel extends JPanel {
 		add(scrollPane, BorderLayout.CENTER);
 
 		try {
-			textPane.read(getClass().getResourceAsStream("/Dokumentation.txt"),
+			textPane.read(getClass().getResourceAsStream("/scripts/Dokumentation.txt"),
 					"");
 		} catch (IOException e) {
 			e.printStackTrace();
