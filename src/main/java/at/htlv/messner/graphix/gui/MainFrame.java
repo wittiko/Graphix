@@ -49,7 +49,7 @@ public class MainFrame extends JFrame {
 	public MainFrame() throws IOException {
 		setSize(950, 740);
 
-		setTitle(APPLICATION_TITLE + " \u00a9 Markus RATHKOLB 2010");
+		setTitle(APPLICATION_TITLE + " \u00a9 Gregor Messner 2011");
 		setLocationByPlatform(true);
 		setDefaultLookAndFeelDecorated(true);
 
@@ -78,7 +78,7 @@ public class MainFrame extends JFrame {
 
 		sizeSlider = new JSlider(SwingConstants.HORIZONTAL, 3, 15,
 				Matrix.DEFAULT_SIZE);
-		sizeSlider.setBorder(new TitledBorder("Gr��e der Matrix"));
+		sizeSlider.setBorder(new TitledBorder("Größe der Matrix"));
 		sizeSlider.setOpaque(false);
 		sizeSlider.setMajorTickSpacing(1);
 		sizeSlider.setPaintTicks(false);
@@ -123,7 +123,7 @@ public class MainFrame extends JFrame {
 		calculationToolbar.add(calcButton, "gapx 22, w 100");
 
 		JButton refreshButton = new JButton(
-				"<html><center><font size = 4>R�cksetzen<br><font size = 2>l�schen</font></html>");
+				"<html><center><font size = 4>Rücksetzen<br><font size = 2>löschen</font></html>");
 		refreshButton.setOpaque(false);
 		refreshButton.addActionListener(new ActionListener() {
 			@Override
@@ -176,7 +176,7 @@ public class MainFrame extends JFrame {
 					} catch (FileNotFoundException e) {
 						JOptionPane
 								.showMessageDialog(null,
-										"Bitte w�hlen Sie eine existierende Datei aus.");
+										"Bitte wählen Sie eine existierende Datei aus.");
 					} catch (IOException e) {
 						JOptionPane.showMessageDialog(null,
 								"Fehler beim Einlesen der Matrize.");
@@ -204,7 +204,7 @@ public class MainFrame extends JFrame {
 					} catch (FileNotFoundException e) {
 						JOptionPane
 								.showMessageDialog(null,
-										"Bitte w�hlen Sie eine existierende Datei aus.");
+										"Bitte wählen Sie eine existierende Datei aus.");
 					} catch (IOException e) {
 						e.printStackTrace();
 						JOptionPane.showMessageDialog(null,
@@ -261,9 +261,9 @@ public class MainFrame extends JFrame {
 	}
 
 	private void dialogBeenden() {
-		String msg = "M�chten Sie " + APPLICATION_TITLE + " beenden?";
+		String msg = "Möchten Sie " + APPLICATION_TITLE + " beenden?";
 		int returnVal = JOptionPane.showConfirmDialog(this, msg,
-				"Bitte best�tigen", JOptionPane.YES_NO_OPTION);
+				"Bitte bestätigen", JOptionPane.YES_NO_OPTION);
 		if (returnVal == JOptionPane.YES_OPTION) {
 			dispose();
 		}
