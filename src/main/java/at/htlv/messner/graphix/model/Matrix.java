@@ -79,7 +79,8 @@ public class Matrix implements Serializable, MatrixInt {
 	 * @return value
 	 * 
 	 */
-	public int getValueAt(int row, int column) {
+	public int getValueAt(int row, int column) 
+	{
 		if (row < 0 || row >= values.length) {
 			throw new IllegalArgumentException(
 					"illegal row index. expected value: between 0 and "

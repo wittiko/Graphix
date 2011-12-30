@@ -198,6 +198,8 @@
 							<addClasspath>true</addClasspath>
 						</manifest>
 					</archive>
+                    <finalName>Proj-${project.version}</finalName>
+                    <outputDirectory>target</outputDirectory>
 				</configuration>
 				<executions>
 					<execution>
