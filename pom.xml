@@ -194,7 +194,7 @@
 					</descriptorRefs>
 					<archive>
 						<manifest>
-							<mainClass>at.htlv.graphix.App</mainClass>
+							<mainClass>at.htlv.messner.graphix.App</mainClass>
 							<addClasspath>true</addClasspath>
 						</manifest>
 					</archive>
