@@ -4,37 +4,49 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
-
+/**
+ * 
+ * 
+ * @author Gregor Messner
+ *
+ */
 public class Matrix implements Serializable, MatrixInt {
 	private static final long serialVersionUID = -7528821221945142099L;
 
 	// 2-dimensionales Array, welches immer quadratisch sein wird.
 	private final int[][] values;
 
-	// Die Standardgr��e der Matrix
-	public final static int DEFAULT_SIZE = 8;
+	// Die Standardgröße der Matrix
+	public final static int DEFAULT_SIZE = 7;
 
-	// Parameterloser Konstruktor wo die Standardgr��e �bernommen wird.
+	/**
+	 *  Parameterloser Konstruktor wo die Standardgröße übernommen wird.
+	 */
 	public Matrix() {
 		this(DEFAULT_SIZE);
 	}
 
-	// Konstruktor wo Matrixgr��e zwischen 0 und 15 �bergeben werden kann.
-	public Matrix(int dimension) {
-		if (dimension < 0 || dimension > 15) {
+	/**
+	 * Konstruktor wo Matrixgröße zwischen 1 und 15 übergeben werden kann.
+	 * @param Größe der Matrix
+	 */
+	
+	public Matrix(int size) 
+	{
+		if (size < 1 || size > 15) {
 			throw new IllegalArgumentException(
 					"illegal dimension. expected value: between 0 and 15 (inclusive), actual value: "
-							+ dimension);
+							+ size);
 		}
 		// Erstellt ein neues, leeres Aray, wo alle Werte anfangs 0 sind.
-		values = new int[dimension][dimension];
+		values = new int[size][size];
 	}
 
-	// Copy-Konstruktor, kopiert die Daten der �bergebenen Matrix in eine Neue.
+	// Copy-Konstruktor, kopiert die Daten der übergebenen Matrix in eine Neue.
 	public Matrix(Matrix original) {
-		// Erstellt zuerst eine neue Matrix der �bergebenen Gr��e.
+		// Erstellt zuerst eine neue Matrix der übergebenen Größe.
 		this(original.getDimension());
-		// Durchlaufe alle Zeilen und Spalten und kopiere s�mtliche Werte.
+		// Durchlaufe alle Zeilen und Spalten und kopiere sämtliche Werte.
 		for (int row = 0; row < original.getDimension(); row++) {
 			for (int column = 0; column < original.getDimension(); column++) {
 				setValueAt(row, column, original.getValueAt(row, column));
@@ -42,12 +54,12 @@ public class Matrix implements Serializable, MatrixInt {
 		}
 	}
 
-	// Dimension entspricht der L�nge des 2-dimensionalen Arrays.
+	// Dimension entspricht der Länge des 2-dimensionalen Arrays.
 	public int getDimension() {
 		return values.length;
 	}
 
-	// Frage den Werte f�r eine Zeile und Spalte ab.
+	// Frage den Werte für eine Zeile und Spalte ab.
 	public int getValueAt(int row, int column) {
 		if (row < 0 || row >= values.length) {
 			throw new IllegalArgumentException(
@@ -65,7 +77,7 @@ public class Matrix implements Serializable, MatrixInt {
 		return values[row][column];
 	}
 
-	// Setze den Wert f�r eine bestimmte Zeile und Spalte.
+	// Setze den Wert für eine bestimmte Zeile und Spalte.
 	public void setValueAt(int row, int column, int value) {
 		if (row < 0 || row >= values.length) {
 			throw new IllegalArgumentException(
@@ -82,8 +94,8 @@ public class Matrix implements Serializable, MatrixInt {
 		values[row][column] = value;
 	}
 
-	// Multipliziert die aktuelle Matrix mit der �bergebenen und gibt eine neue
-	// Matrix als Ergebnis zur�ck.
+	// Multipliziert die aktuelle Matrix mit der übergebenen und gibt eine neue
+	// Matrix als Ergebnis zurück.
 	public Matrix multiply(Matrix otherMatrix) {
 		if (otherMatrix.getDimension() != getDimension()) {
 			throw new IllegalArgumentException(
@@ -102,7 +114,7 @@ public class Matrix implements Serializable, MatrixInt {
 				}
 			}
 		}
-		// Gebe die Matrix zur�ck, welche das Ergebnis enth�lt.
+		// Gebe die Matrix zurück, welche das Ergebnis enthält.
 		return resultMatrix;
 	}
 
