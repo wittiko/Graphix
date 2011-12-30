@@ -50,9 +50,9 @@ public class Matrix implements Serializable, MatrixInt {
 
 	
 	/**
-	 * 
+	 * Kopiert die übergebene Matrix in das Attribut dieses Objektes.
 	 * @param original
-	 * Kopiert die übergebene Matrix in das Attribut dieses Objektes
+	 * 
 	 */
 	public Matrix(Matrix original) {
 		// Erstellt zuerst eine neue Matrix der übergebenen Größe.
@@ -73,10 +73,11 @@ public class Matrix implements Serializable, MatrixInt {
 	}
 
 	/**
+	 * Liefert einen Wert an der übergebenen Position zurück.
 	 * @param row
 	 * @param column
 	 * @return value
-	 * Liefert einen Wert an der übergebenen Position zurück.
+	 * 
 	 */
 	public int getValueAt(int row, int column) {
 		if (row < 0 || row >= values.length) {
@@ -96,10 +97,11 @@ public class Matrix implements Serializable, MatrixInt {
 	}
 
 	/**
+	 * Setzte den übergebenen Wert an der übergebenen Position.
 	 * @param row
 	 * @param column
 	 * @param value
-	 * Setzte den übergebenen Wert an der übergebenen Position.
+	 * 
 	 */
 	public void setValueAt(int row, int column, int value) {
 		if (row < 0 || row >= values.length) {
@@ -118,9 +120,10 @@ public class Matrix implements Serializable, MatrixInt {
 	}
 
 	/**
+	 * Multipliziert die übergebene Matrix mit der aktuellen und gibt die daraus resultierende Matrix zurück.
 	 * @param matrix
 	 * @return result
-	 * Multipliziert die übergebene Matrix mit der aktuellen und gibt die daraus resultierende Matrix zurück.
+	 * 
 	 */
 	public Matrix multiply(Matrix otherMatrix) {
 		if (otherMatrix.getDimension() != getDimension()) {
@@ -166,8 +169,9 @@ public class Matrix implements Serializable, MatrixInt {
 	}
 
 	/**
-	 * @return wegmatrix
 	 * Berechnet die Wegmatrix und gibt sie zurück.
+	 * @return wegmatrix
+	 * 
 	 */
 	public Matrix wegMatrix() {
 
@@ -258,8 +262,9 @@ public class Matrix implements Serializable, MatrixInt {
 
 	// Berechnung der Exzentrizit�ten
 	/**
-	 * @return result
 	 * Berechnet die Exzentritäten und gibt diese als Array zurück.
+	 * @return result
+	 * 
 	 */
 	public int[] exzentrizitaeten() {
 
