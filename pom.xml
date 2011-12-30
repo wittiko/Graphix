@@ -195,6 +195,7 @@
 					<archive>
 						<manifest>
 							<mainClass>at.htlv.graphix.App</mainClass>
+							<addClasspath>true</addClasspath>
 						</manifest>
 					</archive>
 				</configuration>

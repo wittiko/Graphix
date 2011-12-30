@@ -25,5 +25,7 @@ public class MatrixTest
 		Matrix m = new Matrix(5);
 		assertThat(m.getDimension(), is(5));
 	}
+	
+
 
 }
