@@ -13,10 +13,16 @@ import java.util.Iterator;
 public class Matrix implements Serializable, MatrixInt {
 	private static final long serialVersionUID = -7528821221945142099L;
 
-	// 2-dimensionales Array, welches immer quadratisch sein wird.
+	
+	/**
+	 * 2-dimensionales Array, welches immer quadratisch sein wird.
+	 */
 	private final int[][] values;
 
-	// Die Standardgröße der Matrix
+	
+	/**
+	 * Die Standardgröße der Matrix
+	 */
 	public final static int DEFAULT_SIZE = 7;
 
 	/**

@@ -16,7 +16,7 @@ public class MatrixTest
 	public void whenWeUseTheDefaultConstructorWeShouldGet8AsDimension()
 	{
 		Matrix m = new Matrix();
-		assertThat(m.getDimension(), is(8));
+		assertThat(m.getDimension(), is(7));
 	}
 	
 	@Test
