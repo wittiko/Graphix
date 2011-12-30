@@ -34,7 +34,7 @@ public class Matrix implements Serializable, MatrixInt {
 
 	/**
 	 * Konstruktor wo Matrixgröße zwischen 1 und 15 übergeben werden kann.
-	 * @param Größe der Matrix
+	 * @param size
 	 */
 	
 	public Matrix(int size) 
@@ -48,7 +48,12 @@ public class Matrix implements Serializable, MatrixInt {
 		values = new int[size][size];
 	}
 
-	// Copy-Konstruktor, kopiert die Daten der übergebenen Matrix in eine Neue.
+	
+	/**
+	 * 
+	 * @param original
+	 * Kopiert die übergebene Matrix in das Attribut dieses Objektes
+	 */
 	public Matrix(Matrix original) {
 		// Erstellt zuerst eine neue Matrix der übergebenen Größe.
 		this(original.getDimension());
@@ -60,12 +65,19 @@ public class Matrix implements Serializable, MatrixInt {
 		}
 	}
 
-	// Dimension entspricht der Länge des 2-dimensionalen Arrays.
+	/**
+	 * Liefert die Länge des Arrays zurück. Dies entspricht der Anzahl der Knoten.
+	 */
 	public int getDimension() {
 		return values.length;
 	}
 
-	// Frage den Werte für eine Zeile und Spalte ab.
+	/**
+	 * @param row
+	 * @param column
+	 * @return value
+	 * Liefert einen Wert an der übergebenen Position zurück.
+	 */
 	public int getValueAt(int row, int column) {
 		if (row < 0 || row >= values.length) {
 			throw new IllegalArgumentException(
@@ -83,7 +95,12 @@ public class Matrix implements Serializable, MatrixInt {
 		return values[row][column];
 	}
 
-	// Setze den Wert für eine bestimmte Zeile und Spalte.
+	/**
+	 * @param row
+	 * @param column
+	 * @param value
+	 * Setzte den übergebenen Wert an der übergebenen Position.
+	 */
 	public void setValueAt(int row, int column, int value) {
 		if (row < 0 || row >= values.length) {
 			throw new IllegalArgumentException(
@@ -100,8 +117,11 @@ public class Matrix implements Serializable, MatrixInt {
 		values[row][column] = value;
 	}
 
-	// Multipliziert die aktuelle Matrix mit der übergebenen und gibt eine neue
-	// Matrix als Ergebnis zurück.
+	/**
+	 * @param matrix
+	 * @return result
+	 * Multipliziert die übergebene Matrix mit der aktuellen und gibt die daraus resultierende Matrix zurück.
+	 */
 	public Matrix multiply(Matrix otherMatrix) {
 		if (otherMatrix.getDimension() != getDimension()) {
 			throw new IllegalArgumentException(
@@ -124,7 +144,11 @@ public class Matrix implements Serializable, MatrixInt {
 		return resultMatrix;
 	}
 
-	// Gibt die n-te Potenz der aktuellen Matrix zur�ck.
+	/**
+	 * Gibt die Potenz einer Matrix mit dem übergebenen Wert zurück.
+	 * @param n
+	 * @return result
+	 */
 	public Matrix power(int n) {
 		if (n < 1) {
 			throw new IllegalArgumentException(
@@ -141,7 +165,10 @@ public class Matrix implements Serializable, MatrixInt {
 		return resultMatrix;
 	}
 
-	// Berechnung der Wegmatrix
+	/**
+	 * @return wegmatrix
+	 * Berechnet die Wegmatrix und gibt sie zurück.
+	 */
 	public Matrix wegMatrix() {
 
 		Matrix resultMatrix = new Matrix(getDimension());
@@ -177,7 +204,11 @@ public class Matrix implements Serializable, MatrixInt {
 		return resultMatrix;
 	}
 
-	// Berechnung der Distanzmatrix
+	
+	/**
+	 * Berechnet die Distanzmatrix und liefert diese zurück.
+	 * @return distanzmatrix
+	 */
 	public Matrix distanzMatrix() {
 
 		Matrix resultMatrix = new Matrix(getDimension());
@@ -226,6 +257,10 @@ public class Matrix implements Serializable, MatrixInt {
 	}
 
 	// Berechnung der Exzentrizit�ten
+	/**
+	 * @return result
+	 * Berechnet die Exzentritäten und gibt diese als Array zurück.
+	 */
 	public int[] exzentrizitaeten() {
 
 		Matrix distanzMatrix = distanzMatrix();
@@ -246,7 +281,11 @@ public class Matrix implements Serializable, MatrixInt {
 		return exzentrizitaeten;
 	}
 
-	// Berechnung des Radius
+	/**
+	 * Berechnet den Radius und gibt diesen zurück.
+	 * Der Radius entspricht der kleinsten Exzentrität.
+	 * @return radius
+	 */
 	public int radius() {
 		// Hole die Exzentrizit�ten.
 		int[] exzentrizitaeten = exzentrizitaeten();
@@ -263,7 +302,11 @@ public class Matrix implements Serializable, MatrixInt {
 		return radius;
 	}
 
-	// Berechnung des Durchmessers
+	/**
+	 * Berechnet den Durchmesser und gibt diesen zurück.
+	 * Der Durchmesser entspricht der größten Exzentrität.
+	 * @return durchmesser
+	 */
 	public int durchmesser() {
 		// Berechnet sich wie der Radius, nur wird hier nach dem Maximum
 		// gesucht.
@@ -276,7 +319,10 @@ public class Matrix implements Serializable, MatrixInt {
 		return durchmesser;
 	}
 
-	// Berechnung des Zentrums
+	/**
+	 * Berechnet das Zentrum und gibt dieses zurück.
+	 * Das Zentrum entspricht der Menge der Knoten die die Exzentrität des Radius haben.
+	 */
 	public ArrayList<Integer> zentrum() {
 		// Berechne die Exzentrizit�ten und den Radius.
 		int[] exzentrizitaeten = exzentrizitaeten();
