@@ -12,7 +12,7 @@ public class App
 {
     public static void main( String[] args )
     {
-        new HelloWorld();
+        
         SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				try {

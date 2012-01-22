@@ -36,25 +36,26 @@ public class CalculationPanel extends JPanel {
 		System.out.println(matrix);
 
 		String text = "<font size =3 face=Fixedsys>";
-
+                //text += "Noch keine Ausgabe ;)";
+                
 		if (matrix.zusammenhaengend()) {
-			text += "<b>EXZENTRIZIT�TEN:</b>" + "<br>";
+			text += "<b>EXZENTRIZITÄTEN:</b>" + "<br>";
 			int[] exzentrizitaeten = matrix.exzentrizitaeten();
 //			text += "Anzahl: " + exzentrizitaeten.length + "<br>";
 			for (int i = 0; i < exzentrizitaeten.length; i++) {
 				text += "Knoten " + (i + 1) + ": " + exzentrizitaeten[i]
 						+ "<br>";
 			}
-			   text += "<p><b>RADIUS:</b>" + "<br>" + "Kleinste Exzentrizit�t: "
+			   text += "<p><b>RADIUS:</b>" + "<br>" + "Kleinste Exzentrizität: "
 					+ matrix.radius() + "<br>" + "<p>" + "<b>DURCHMESSER:</b>"
-					+ "<br>" + "Gr��te Exzentrizit�t: " + matrix.durchmesser()
+					+ "<br>" + "Größte Exzentrizität: " + matrix.durchmesser()
 					+ "<br>" + "<p>" + "<b>ZENTRUM:</b>" + "<br>" + "Knoten: "
 					+ matrix.zentrum() + "<br>";
 		} else {
-			text += "<b>EXZENTRIZIT�TEN:</b>"
-					+ "<br> Graph ist nicht zusammenh�ngend!<br>";
+			text += "<b>EXZENTRIZITÄTEN:</b>"
+					+ "<br> Graph ist nicht zusammenhängend!<br>";
 		}
-
+                
 		text += "<p>" + "<b>KOMPONENTEN:</b>" + "<br>";
 		ArrayList<ArrayList<Integer>> komponenten = matrix.komponenten();
 		text += "Anzahl: " + komponenten.size() + "<br>";
@@ -62,12 +63,14 @@ public class CalculationPanel extends JPanel {
 			text += "Komponente " + (i + 1) + ": " + komponenten.get(i)
 					+ "<br>";
 		}
+                
 		text += "<p>" + "<b>ARTIKULATIONEN:</b>" + "<br>";
 		ArrayList<Integer> artikulationen = matrix.artikulationen();
 		text += "Anzahl: " + artikulationen.size() + "<br>Knoten: "
 				+ artikulationen;
 
-		text += "<p>" + "<b>BR�CKEN:</b><br>" + "Anzahl: "
+                
+		text += "<p>" + "<b>BRÜCKEN:</b><br>" + "Anzahl: "
 				+ matrix.bruecken().size() + "<br>";
 		String brueckenText = "{ }";
 		text += "Kanten:";
@@ -82,7 +85,7 @@ public class CalculationPanel extends JPanel {
 			brueckenText += " }";
 		}
 		text += brueckenText + "<br>";
-
+                /*
 		text += "<p>" + "<b>BL�CKE:</b><br>";
 		text += "Anzahl: " + matrix.anzahlBloecke() + "<br>";
 
@@ -93,10 +96,18 @@ public class CalculationPanel extends JPanel {
 			text += "Der Graph ist ein Wald!";
 		} else {
 			text += "Mindestens eine Komponente ist kein Baum!";
-		}
+		}*/
 
 		text += "<p>" + "<b>EULER'SCHE LINIE:</b><br>";
-		if (matrix.hasOffeneEulerscheLinie()) {
+                if(matrix.hasEuler())
+                {
+                    text += "Eulersche Linie vorhanden";
+                }
+                else
+                {
+                    text += "Eulersche Linie nicht vorhanden";
+                }
+		/*if (matrix.hasOffeneEulerscheLinie()) {
 			text += "Offene Linie vorhanden!";
 			ArrayList<ArrayList<Integer>> eulerWeg = matrix.eulerWeg();
 			String eulerWegText = "" + eulerWeg.get(0).toString();
@@ -117,7 +128,7 @@ public class CalculationPanel extends JPanel {
 		} else {
 			text += "Nicht vorhanden!";
 		}
-		text += "<p>";
+		text += "<p>";*/
 		textPane.setText(text);
 		textPane.setCaretPosition(0);
 

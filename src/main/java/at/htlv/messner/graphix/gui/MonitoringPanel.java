@@ -51,7 +51,7 @@ public class MonitoringPanel extends JPanel {
 		}
 		text += knotenText + "<br>";
 
-		text += "<p>" + "<b>Ausgew�hlte Kanten:</b><br>" + "Anzahl: "
+		text += "<p>" + "<b>Ausgewählte Kanten:</b><br>" + "Anzahl: "
 				+ matrix.getKantenAnzahl() + "<br>";
 		String kantenText = "{ }";
 		text += "Kanten:";

@@ -25,9 +25,7 @@ public interface MatrixInt
 	public int anzahlBloecke();
 	public ArrayList<ArrayList<Integer>> selektierteKanten();
 	public ArrayList<Integer> selektierteKnoten();
-	public boolean hasOffeneEulerscheLinie();
-	public boolean hasGeschlosseneEulerscheLinie();
-	public ArrayList<ArrayList<Integer>> eulerWeg();
+	
 	
 
 }
