@@ -182,6 +182,29 @@ public class Matrix implements Serializable, MatrixInt {
 		// Gebe die potenzierte Matrix zur�ck.
 		return resultMatrix;
 	}
+        
+        public int[] getKnotenGrad()
+        {
+            int[] knotenGrade = new int[getDimension()];
+            for(int i = 0; i < getDimension(); i++)
+            {
+                knotenGrade[i] = getKnotenGrad(i);
+            }
+            return knotenGrade;
+        }
+        
+        public int getKnotenGrad(int knoten)
+        {
+            int knotenGrad = 0;
+            if(knoten < getDimension())
+            {
+                for(int i = 0; i < getDimension(); i++)
+                {
+                    knotenGrad += getValueAt(knoten, i);
+                }
+            }
+            return knotenGrad;
+        }
 
 	/**
 	 * Berechnet die Wegmatrix und gibt sie zurück.
@@ -569,6 +592,33 @@ public class Matrix implements Serializable, MatrixInt {
             
             return erg;
         }
+        
+        public ArrayList<ArrayList<Integer>> eulerKreis()
+        {
+            // es wird angenommen dass es keine mehrfachkanten oder schlingen gibt
+            Matrix tmp = new Matrix(this);
+            ArrayList<ArrayList<Integer>> kanten = tmp.selektierteKanten();
+            ArrayList<ArrayList<Integer>> euler = new ArrayList<ArrayList<Integer>>();
+            ArrayList<ArrayList<Integer>> kreise = new ArrayList<ArrayList<Integer>>();
+            ArrayList<Integer> knoten = new ArrayList<Integer>();
+            boolean solved = false;
+            
+            while(!solved)
+            {
+                
+                
+                solved = true;
+            }
+            
+            
+            return euler;
+        }
+        
+        private ArrayList<Integer> berechneKreis(Matrix matrix, int knoten)
+        {
+            ArrayList<Integer> erg = new ArrayList<Integer>();
+            return erg;
+        }
 
 	// Berechnung der Kantenanzahl f�r Baumberechnung.
 	public int getKantenAnzahl() {
@@ -609,6 +659,166 @@ public class Matrix implements Serializable, MatrixInt {
 		
 		return aenderungen;
 	}
+        
+        public ArrayList<ArrayList<Integer>> bloecke()
+        {
+            
+            ArrayList<ArrayList<Integer>> bloecke = new ArrayList<ArrayList<Integer>>();
+            ArrayList<Integer> artikulationen = artikulationen();
+            ArrayList<ArrayList<Integer>> bruecken = bruecken();
+            // jede Brücke ist ein Block also der Liste hinzufügen
+            Iterator<ArrayList<Integer>> itb = bruecken.iterator();
+            while(itb.hasNext())
+            {
+                bloecke.add(itb.next());
+            }
+            // wenn es keine artikulationen gibt und der graph ist der gesamte graph ein block
+            // OK!
+            if(artikulationen.isEmpty() && zusammenhaengend())
+            {
+                ArrayList<Integer> artikulationsfrei = new ArrayList<Integer>();
+                for(int i = 0; i < getDimension(); i++)
+                {
+                    artikulationsfrei.add(i + 1);
+                }
+                bloecke.add(artikulationsfrei);
+            }
+            
+            /*if(!zusammenhaengend())
+            {
+                ArrayList<Integer> artikulationsfrei = new ArrayList<Integer>();
+                for(int i = 0; i < komponenten().size(); i++)
+                {
+                    if(komponenten().get(i).size() > 2)
+                    {
+                        ArrayList<Integer> artlosekomp = new ArrayList<Integer>();
+                        artlosekomp.addAll(komponenten().get(i));
+                        for(int j = 0; j < artikulationen.size(); j++)
+                        {
+                            if(!artlosekomp.contains(artikulationen.get(j)))
+                            {
+                                bloecke.add(artlosekomp);
+                            }
+                            
+                        }
+                        //bloecke.add(komponenten().get(i));
+                    }
+                }
+            }*/
+            // ein isolierter knoten ist auch ein block
+            // OK!
+            int[] knotengrad = getKnotenGrad();
+            
+                
+            for(int i = 0; i < knotengrad.length; i++)
+            {
+                   
+                if(knotengrad[i] == 0)
+                {
+                    ArrayList<Integer> isolierterKnoten = new ArrayList<Integer>();
+                    isolierterKnoten.add(i + 1);
+                    bloecke.add(isolierterKnoten);
+                }
+                    
+            }
+            
+            // ein block ist der größte zusammenhängende artikulationsfrei teilgraph
+            Matrix work = new Matrix(this);
+            // berechne die komponenten am anfang
+            // nach entfernen der artikulationen bleiben nur mehr teile der blöcke über
+            // die teile der blöcke und die dazugehörige artikulation sind ein block
+            // 
+            ArrayList<ArrayList<Integer>> kompstart = work.komponenten();
+            Iterator<Integer> ita = artikulationen.iterator();
+            
+            
+            // entferne alle artikulationen aus der matrix
+            System.out.println(work.komponenten().size());
+            while(ita.hasNext())
+            {
+                Integer art = ita.next();
+                for(int i = 0; i < work.getDimension(); i++)
+                {
+                    work.setValueAt(art.intValue()-1, i, 0);
+                    work.setValueAt(i, art.intValue()-1, 0);
+                }
+            }
+            
+            // berechne die neuen komponenten
+            ArrayList<ArrayList<Integer>> kompend = work.komponenten();
+            Iterator<ArrayList<Integer>> itke = kompend.iterator();
+            Iterator<ArrayList<Integer>> itks = kompstart.iterator();
+            // solange es neue komponenten von der endberechnung gibt
+            Iterator<Integer> itaneu = artikulationen.iterator();
+            
+            // entferne alle komponenten die nur einen knoten haben
+            // dies sind isolierte knoten
+            // wenn es brücken sind wurden sie bereits hinzugefügt
+            // wenn es isolierte knoten sind wurden sie bereits hinzugefügt
+            while(itke.hasNext())
+            {
+                if(itke.next().size() == 1)
+                {
+                    itke.remove();
+                }
+            }
+            
+            // solange es komponenten im artikulationsfreien graphen gibt
+            Iterator<ArrayList<Integer>> itkegtone = kompend.iterator();
+            while(itkegtone.hasNext())
+            {
+                
+                // weise dem block die komponente zu
+                ArrayList<Integer> block = itkegtone.next();
+                for(int i = 0; i <  block.size(); i++)
+                {
+                    Integer knoten = block.get(i);
+                    // füge die artikulationen die mit einem knoten des blocks verbunden sind hinzu
+                    // wenn knoten ist keine artikulation
+                    if(!artikulationen.contains(knoten))
+                    {
+                        
+                    
+                        for(int j = 0; j < artikulationen.size(); j++)
+                        {
+                            Integer artikulation = artikulationen.get(j);
+                            if(getValueAt(knoten-1, artikulation-1) == 1)
+                            {
+                                if(!block.contains(artikulation))
+                                {
+                                    block.add(artikulation);
+                                }
+                                if(!bloecke.contains(block))
+                                {
+                                    bloecke.add(block);
+                                }
+                            
+                            }
+                        }
+                        if(!bloecke.contains(block))
+                        {
+                            bloecke.add(block);
+                        }
+                        
+                    }
+                    
+                        
+                }
+            }
+            
+            
+            
+            
+            
+            
+            //System.out.println(work.komponenten().size());
+            
+                
+                
+            
+            
+            return bloecke;
+        }
 
 	// Liste aller ausgew�hlten Kanten erstellen.
 	public ArrayList<ArrayList<Integer>> selektierteKanten() {

@@ -9,6 +9,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 
 import at.htlv.messner.graphix.model.Matrix;
+import java.sql.Blob;
 
 public class CalculationPanel extends JPanel {
 
@@ -56,6 +57,14 @@ public class CalculationPanel extends JPanel {
 					+ "<br> Graph ist nicht zusammenhängend!<br>";
 		}
                 
+                text += "<p>" + "<b>KNOTENGRADE:</b>" + "<br>";
+                int[] knotenGrade = matrix.getKnotenGrad();
+                for(int i = 0; i < knotenGrade.length; i++)
+                {
+                    text += "Knoten " + (i + 1) + ": " + knotenGrade[i] + "<br>";
+                }
+                
+                
 		text += "<p>" + "<b>KOMPONENTEN:</b>" + "<br>";
 		ArrayList<ArrayList<Integer>> komponenten = matrix.komponenten();
 		text += "Anzahl: " + komponenten.size() + "<br>";
@@ -85,10 +94,16 @@ public class CalculationPanel extends JPanel {
 			brueckenText += " }";
 		}
 		text += brueckenText + "<br>";
+                
+		text += "<p>" + "<b>BLÖCKE:</b><br>";
+                ArrayList<ArrayList<Integer>> bloecke = matrix.bloecke();
+		text += "Anzahl: " + bloecke.size() + "<br>";
+                for( int i = 0; i < bloecke.size(); i++)
+                {
+                    text += "Block " + (i + 1) + ": " + bloecke.get(i) + "<br>";
+                }
+                
                 /*
-		text += "<p>" + "<b>BL�CKE:</b><br>";
-		text += "Anzahl: " + matrix.anzahlBloecke() + "<br>";
-
 		text += "<p>" + "<b>BAUM:</b><br>";
 		if (matrix.istBaum() == true) {
 			text += "Der Graph ist ein Baum!";
@@ -107,6 +122,7 @@ public class CalculationPanel extends JPanel {
                 {
                     text += "Eulersche Linie nicht vorhanden";
                 }
+                matrix.eulerKreis();
 		/*if (matrix.hasOffeneEulerscheLinie()) {
 			text += "Offene Linie vorhanden!";
 			ArrayList<ArrayList<Integer>> eulerWeg = matrix.eulerWeg();
