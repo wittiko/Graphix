@@ -20,9 +20,7 @@ public interface MatrixInt
 	public ArrayList<Integer> artikulationen();
 	public ArrayList<ArrayList<Integer>> bruecken();
 	public int getKantenAnzahl();
-	public boolean istBaum();
-	public boolean istWald();
-	public int anzahlBloecke();
+	public ArrayList<ArrayList<Integer>> bloecke();
 	public ArrayList<ArrayList<Integer>> selektierteKanten();
 	public ArrayList<Integer> selektierteKnoten();
 	

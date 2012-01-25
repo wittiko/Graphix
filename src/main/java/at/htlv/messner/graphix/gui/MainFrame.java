@@ -36,7 +36,7 @@ public class MainFrame extends JFrame {
 	private static final long serialVersionUID = -8933400712100861899L;
 
 	private final static String APPLICATION_TITLE = "GRAPHIX 5";
-	private final static String appInfo = "<html><font size = 4>GRAPHIX Version 5</font><br><br><font size = 2><font size = 2>Erstellt am: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;29.03.2010<br><font size = 2><font size = 2>Letztes Update: &nbsp;16.06.2010<br><br>Autor: Markus Rathkolb<br>Copyright  2010<br><br></html>";
+	private final static String appInfo = "<html><font size = 4>GRAPHIX Version 5</font><br><br><font size = 2><font size = 2>Erstellt am: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;05.12.2011<br><font size = 2><font size = 2>Letztes Update: &nbsp;25.01.2012<br><br>Autor: Gregor Messner<br>Copyleft  2011-2012<br><br></html>";
 
 	private MatrixPanel matrixPanel;
 	private MatrixPanel distancePanel;

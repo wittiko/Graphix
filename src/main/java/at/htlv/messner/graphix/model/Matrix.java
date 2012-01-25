@@ -40,12 +40,12 @@ public class Matrix implements Serializable, MatrixInt {
 	
 	public Matrix(int size) 
 	{
-		if (size < 1 || size > 15) {
+		if (size < 1 || size > 15) 
+                {
 			throw new IllegalArgumentException(
 					"illegal dimension. expected value: between 0 and 15 (inclusive), actual value: "
 							+ size);
-		}
-		// Erstellt ein neues, leeres Aray, wo alle Werte anfangs 0 sind.
+                }
 		values = new int[size][size];
 	}
 
@@ -68,8 +68,9 @@ public class Matrix implements Serializable, MatrixInt {
 	}
 
 	/**
-	 * Liefert die Länge des Arrays zurück. Dies entspricht der Anzahl der Knoten.
-	 */
+         * 
+         * @return dimension - Die Größe der Matrix
+         */
 	public int getDimension() 
         {
 		return values.length;
@@ -155,7 +156,6 @@ public class Matrix implements Serializable, MatrixInt {
 				}
 			}
 		}
-		// Gebe die Matrix zurück, welche das Ergebnis enthält.
 		return resultMatrix;
 	}
 
@@ -171,18 +171,18 @@ public class Matrix implements Serializable, MatrixInt {
 			throw new IllegalArgumentException(
 					"illegal power. expected: n >= 1, actual: " + n);
 		}
-		// Erstelle eine Kopie der aktuellen Matrix (entspricht 1.Potenz)
 		Matrix resultMatrix = new Matrix(this);
-		// F�r jeden weiteren Potenzschritt jenseits 1 ist eine Multiplikation
-		// mit der Original-Matrix notwendig.
 		for (int i = 1; i < n; i++) 
                 {
 			resultMatrix = resultMatrix.multiply(this);
 		}
-		// Gebe die potenzierte Matrix zur�ck.
 		return resultMatrix;
 	}
         
+        /**
+         * 
+         * @return knotenGrade - Liefert ein Array mit den KnotenGraden zurück
+         */
         public int[] getKnotenGrad()
         {
             int[] knotenGrade = new int[getDimension()];
@@ -193,6 +193,11 @@ public class Matrix implements Serializable, MatrixInt {
             return knotenGrade;
         }
         
+        /**
+         * 
+         * @param knoten
+         * @return knotengrad - Liefert den Knotengrad des übergebenen Knotens zurück
+         */
         public int getKnotenGrad(int knoten)
         {
             int knotenGrad = 0;
@@ -349,8 +354,6 @@ public class Matrix implements Serializable, MatrixInt {
         {
 
 		Matrix distanzMatrix = distanzMatrix();
-		// Erstelle ein Array, das genau so gro� ist , wie die Distanzmatrix
-		// hoch ist, wo an jeder Stelle das Maximum gespeichert wird.
 		int[] exzentrizitaeten = new int[distanzMatrix.getDimension()];
 		// Durchlaufe alle Zeilen und Spalten.
 		for(int row = 0; row < distanzMatrix.getDimension(); row++)
@@ -427,7 +430,10 @@ public class Matrix implements Serializable, MatrixInt {
 		return zentren;
 	}
 
-	// Pr�fung, ob Graph zusammenh�ngend ist (Alle Elemente in der Wegmatrix 1).
+	/**
+         * Überprüft ob der Graph zusammenhängend ist
+         * @return true wenn sich in der Webmatrix nur 1er befinden, false wenn es einen anderen Wert gibt
+         */
 	public boolean zusammenhaengend() 
         {
             Matrix weg = wegMatrix();
@@ -445,14 +451,20 @@ public class Matrix implements Serializable, MatrixInt {
             return true;
 	}
 
-	// Berechnet die Komponenten auf Basis der Wegmatrix des aktuellen Knotens.
+	/**
+         * Berechnet auf Basis der Wegmatrix die Komponenten
+         * @return komponenten - Liefert die Komponenten zurück
+         */
 	public ArrayList<ArrayList<Integer>> komponenten() 
         {
 		return komponenten(wegMatrix());
 	}
 
-	// L�sst den Benutzer die Wegmatrix �bergeben, f�r welche die Komponenten
-	// berechnet werden sollen. Eine Komponenten ist ein Teilgraph.
+	/**
+         * 
+         * @param wegMatrix
+         * @return komponenten - Liefert die Komponenten zurück
+         */
 	private ArrayList<ArrayList<Integer>> komponenten(Matrix wegMatrix) 
         {
 		// Erstelle eine Liste, welche mehrere Komponenten aufnehmen kann.
@@ -496,7 +508,10 @@ public class Matrix implements Serializable, MatrixInt {
 		return komponenten;
 	}
 
-	// Berechnung der Artikulationen (Cutpoints).
+	/**
+         * Berechnet die Artikulationen auf Basis der Komponenten
+         * @return artikulationen - Liefert die Artikulationen als ArrayList zurück
+         */
 	public ArrayList<Integer> artikulationen() {
 		int komponenten = komponenten().size();
 		
@@ -520,7 +535,10 @@ public class Matrix implements Serializable, MatrixInt {
 		return artikulationen;
 	}
 
-	// Berechnung der Br�cken
+	/**
+         * Berechnet die Brücken auf Basis der Komponenten
+         * @return bruecken - Liefert die Brücken als ArrayList zurück.
+         */
 	public ArrayList<ArrayList<Integer>> bruecken() 
         {
 		ArrayList<ArrayList<Integer>> bruecken = new ArrayList<ArrayList<Integer>>();
@@ -554,73 +572,13 @@ public class Matrix implements Serializable, MatrixInt {
 		return bruecken;
 	}
         
-        public boolean hasEuler()
-        {
-            boolean erg = false;
-            if(zusammenhaengend())
-            {
-                int[] knotenGrad = new int[getDimension()];
-                for(int row = 0; row < getDimension(); row++)
-                {
-                    int tmp = 0;
-                    for(int column = 0; column < getDimension(); column++)
-                    {
-                        
-                        tmp += getValueAt(row, column);
-                        knotenGrad[row] = tmp;
-                        
-                    }
-                    System.out.println("Knotengrad Knoten" + row + ": ");
-                    System.out.println(knotenGrad[row]);
-                }
-                for(int i = 0; i < knotenGrad.length; i++)
-                {
-                    if(knotenGrad[i]%2 == 0)
-                    {
-                        erg = true;
-                    }
-                    if(knotenGrad[i]%2 != 0)
-                    {
-                        erg = false;
-                        break;
-                    }
-                    
-                }
-                
-            }
-            
-            
-            return erg;
-        }
+      
+       
         
-        public ArrayList<ArrayList<Integer>> eulerKreis()
-        {
-            // es wird angenommen dass es keine mehrfachkanten oder schlingen gibt
-            Matrix tmp = new Matrix(this);
-            ArrayList<ArrayList<Integer>> kanten = tmp.selektierteKanten();
-            ArrayList<ArrayList<Integer>> euler = new ArrayList<ArrayList<Integer>>();
-            ArrayList<ArrayList<Integer>> kreise = new ArrayList<ArrayList<Integer>>();
-            ArrayList<Integer> knoten = new ArrayList<Integer>();
-            boolean solved = false;
-            
-            while(!solved)
-            {
-                
-                
-                solved = true;
-            }
-            
-            
-            return euler;
-        }
-        
-        private ArrayList<Integer> berechneKreis(Matrix matrix, int knoten)
-        {
-            ArrayList<Integer> erg = new ArrayList<Integer>();
-            return erg;
-        }
-
-	// Berechnung der Kantenanzahl f�r Baumberechnung.
+        /**
+         * Berechnet die Kantenanzahl auf Basis der Adjazenzmatrix
+         * @return anzahl - Die Kantenanzahl
+         */
 	public int getKantenAnzahl() {
 		int anzahl = 0;
 
@@ -638,28 +596,10 @@ public class Matrix implements Serializable, MatrixInt {
 		return anzahl / 2;
 	}
 
-	// Pr�fung, ob Graph ein Baum ist.
-	public boolean istBaum() 
-        {
-		return getKantenAnzahl() - getDimension() + komponenten().size() == 0
-				&& komponenten().size() == 1;
-	}
-
-	// Pr�fung, ob Graph ein Wald ist.
-	public boolean istWald() 
-        {
-		return getKantenAnzahl() - getDimension() + komponenten().size() == 0
-				&& komponenten().size() > 1;
-	}
-
-	// Berechnung der Anzahl der Bl�cke.
-	public int anzahlBloecke() {
-		int aenderungen = komponenten().size();
-
-		
-		return aenderungen;
-	}
-        
+	/**
+         * Berechnet die Blöcke auf Basis der Komponenten, Artikulationen und Brücken.
+         * @return bloecke - Gibt die Bloecke als ArrayList zurück.
+         */
         public ArrayList<ArrayList<Integer>> bloecke()
         {
             
@@ -684,27 +624,7 @@ public class Matrix implements Serializable, MatrixInt {
                 bloecke.add(artikulationsfrei);
             }
             
-            /*if(!zusammenhaengend())
-            {
-                ArrayList<Integer> artikulationsfrei = new ArrayList<Integer>();
-                for(int i = 0; i < komponenten().size(); i++)
-                {
-                    if(komponenten().get(i).size() > 2)
-                    {
-                        ArrayList<Integer> artlosekomp = new ArrayList<Integer>();
-                        artlosekomp.addAll(komponenten().get(i));
-                        for(int j = 0; j < artikulationen.size(); j++)
-                        {
-                            if(!artlosekomp.contains(artikulationen.get(j)))
-                            {
-                                bloecke.add(artlosekomp);
-                            }
-                            
-                        }
-                        //bloecke.add(komponenten().get(i));
-                    }
-                }
-            }*/
+            
             // ein isolierter knoten ist auch ein block
             // OK!
             int[] knotengrad = getKnotenGrad();
@@ -820,7 +740,10 @@ public class Matrix implements Serializable, MatrixInt {
             return bloecke;
         }
 
-	// Liste aller ausgew�hlten Kanten erstellen.
+	/**
+         * Gibt alle Kanten zurück. Wird für die Graphdarstellung der GUI benötigt.
+         * @return selektierteKanten - Gibt alle Kanten als ArrayList zurück
+         */
 	public ArrayList<ArrayList<Integer>> selektierteKanten() {
 		ArrayList<ArrayList<Integer>> selektierteKanten = new ArrayList<ArrayList<Integer>>();
 		// Durchlaufe alle Zeilen und Spalten.
@@ -847,7 +770,10 @@ public class Matrix implements Serializable, MatrixInt {
 		return selektierteKanten;
 	}
 
-	// Liste aller ausgew�hlter Knoten erstellen.
+	/**
+         * Gibt eine Liste aller Knoten zurück. Wird für die GUI benötigt.
+         * @return selektierteKnoten - Alle Knoten als ArrayList.
+         */
 	public ArrayList<Integer> selektierteKnoten() {
 		ArrayList<Integer> selektierteKnoten = new ArrayList<Integer>();
 		// Durchlaufe alle Zeilen und Spalten.

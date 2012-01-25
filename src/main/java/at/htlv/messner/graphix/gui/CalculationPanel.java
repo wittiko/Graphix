@@ -103,48 +103,8 @@ public class CalculationPanel extends JPanel {
                     text += "Block " + (i + 1) + ": " + bloecke.get(i) + "<br>";
                 }
                 
-                /*
-		text += "<p>" + "<b>BAUM:</b><br>";
-		if (matrix.istBaum() == true) {
-			text += "Der Graph ist ein Baum!";
-		} else if (matrix.istWald() == true) {
-			text += "Der Graph ist ein Wald!";
-		} else {
-			text += "Mindestens eine Komponente ist kein Baum!";
-		}*/
-
-		text += "<p>" + "<b>EULER'SCHE LINIE:</b><br>";
-                if(matrix.hasEuler())
-                {
-                    text += "Eulersche Linie vorhanden";
-                }
-                else
-                {
-                    text += "Eulersche Linie nicht vorhanden";
-                }
-                matrix.eulerKreis();
-		/*if (matrix.hasOffeneEulerscheLinie()) {
-			text += "Offene Linie vorhanden!";
-			ArrayList<ArrayList<Integer>> eulerWeg = matrix.eulerWeg();
-			String eulerWegText = "" + eulerWeg.get(0).toString();
-			for (int i = 1; i < eulerWeg.size(); i++) {
-				eulerWegText += ", " + eulerWeg.get(i);
-			}
-			eulerWegText += "";
-			text += "<br>" + eulerWegText + "<br>";
-		} else if (matrix.hasGeschlosseneEulerscheLinie()) {
-			text += "Geschlossene Linie vorhanden!";
-			ArrayList<ArrayList<Integer>> eulerWeg = matrix.eulerWeg();
-			String eulerWegText = "" + eulerWeg.get(0).toString();
-			for (int i = 1; i < eulerWeg.size(); i++) {
-				eulerWegText += ", " + eulerWeg.get(i);
-			}
-			eulerWegText += "";
-			text += "<br>" + eulerWegText + "<br>";
-		} else {
-			text += "Nicht vorhanden!";
-		}
-		text += "<p>";*/
+                
+		text += "<p>";
 		textPane.setText(text);
 		textPane.setCaretPosition(0);
 
