@@ -67,7 +67,7 @@ public class MonitoringPanel extends JPanel {
 		}
 		text += kantenText + "<br>";
 
-		int wert = 0;
+		/*int wert = 0;
 		for (int potenz = 1; potenz <= matrix.getDimension(); potenz++) {
 			text += "<p><b>Adjazenzmatrix" + "<sup>" + potenz
 					+ "</sup> (x)</b><br>";
@@ -96,7 +96,7 @@ public class MonitoringPanel extends JPanel {
 				}
 				text += "}" + "<br>" + "</pre>";
 			}
-		}
+		}*/
 		textPane.setText(text);
 		textPane.setCaretPosition(0);
 	}

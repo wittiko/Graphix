@@ -15,9 +15,7 @@ Berechnung und Darstellung von Teilbereichen der Graphentheorie.<p>
 + Komponenten<br>
 + Artikulationen<br>
 + Brücken<br>
-+ Blöcke<br>
-+ Baum<br>
-+ Euler'sche Linie<p>
++ Blöcke<p>
 
 <b>Adjazenzmatrix:</b><br>
 Matrix zur Eingabe von ungerichteten Kanten, welche zur weiteren Berechnung herangezogen werden. Die Diagonale ist auf 0 gesetzt und somit sind Knoten mit Schlingen nicht möglich.<p>
@@ -54,11 +52,6 @@ Sind Kanten, wo bei Wegnahme einer solchen Kante der Graph in mehr Komponenten z
 
 <b>Blöcke:</b><br>
 Ist ein zusammenhängender Graph ohne Artikulationen.<p>
-
-<b>Baum:</b><br>
-Ein kreisloser Graph ist ein Baum.<p>
-
-<b>Euler'sche Linie:</b><br>
-Ein Weg wo alle Kanten einmal durchlaufen werden.<p>
+<p>
 
 </html>

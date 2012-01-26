@@ -152,7 +152,11 @@ public class Matrix implements Serializable, MatrixInt {
                         {
 				for (int otherColumn = 0; otherColumn < resultMatrix.getDimension(); otherColumn++) 
                                 {
-					resultMatrix.values[row][column] += values[row][otherColumn] * otherMatrix.values[otherColumn][column];
+                                    if((resultMatrix.values[row][column] += values[row][otherColumn] * otherMatrix.values[otherColumn][column]) >= 1)
+                                    {
+                                        resultMatrix.values[row][column] = 1;
+                                    }
+                                    //resultMatrix.values[row][column] += values[row][otherColumn] * otherMatrix.values[otherColumn][column];
 				}
 			}
 		}
@@ -363,10 +367,7 @@ public class Matrix implements Serializable, MatrixInt {
                         exzentrizitaeten[row] = Math.max(distanzMatrix.getValueAt(row, column), exzentrizitaeten[row]);
                     }
                 }
-                for(int i = 0; i < exzentrizitaeten.length; i++)
-                {
-                    System.out.println(exzentrizitaeten[i]);
-                }
+                
 		return exzentrizitaeten;
 	}
 
@@ -642,18 +643,41 @@ public class Matrix implements Serializable, MatrixInt {
                     
             }
             
+            
+            Matrix workWithoutEdges = new Matrix(this);
+            while(workWithoutEdges.getKantenAnzahl() >= 1)
+            {
+                /*System.out.println("Kantenanzahl" + workWithoutEdges.getKantenAnzahl());
+                String kantenText = "";
+                ArrayList<ArrayList<Integer>> kanten = workWithoutEdges.selektierteKanten();
+		if (workWithoutEdges.selektierteKanten().size() > 0) 
+                {
+			kantenText = "{ " + kanten.get(0).toString();
+
+			for (int i = 1; i < kanten.size(); i++) {
+				kantenText += ", " + kanten.get(i);
+			}
+			kantenText += " }";
+		}
+                System.out.println(kantenText);
+                System.out.println("Artikulationen: " + artikulationen.toString());*/
+               
+                
+                //System.out.println(workWithoutEdges.values.toString());
             // ein block ist der größte zusammenhängende artikulationsfrei teilgraph
-            Matrix work = new Matrix(this);
+            
+            Matrix work = new Matrix(workWithoutEdges);
             // berechne die komponenten am anfang
             // nach entfernen der artikulationen bleiben nur mehr teile der blöcke über
             // die teile der blöcke und die dazugehörige artikulation sind ein block
             // 
             ArrayList<ArrayList<Integer>> kompstart = work.komponenten();
+            artikulationen = work.artikulationen();
             Iterator<Integer> ita = artikulationen.iterator();
             
             
             // entferne alle artikulationen aus der matrix
-            System.out.println(work.komponenten().size());
+            //System.out.println(work.komponenten().size());
             while(ita.hasNext())
             {
                 Integer art = ita.next();
@@ -710,21 +734,48 @@ public class Matrix implements Serializable, MatrixInt {
                                 }
                                 if(!bloecke.contains(block))
                                 {
-                                    bloecke.add(block);
+                                    //Collections.sort(block);
+                                    if(block.size() > 2)
+                                    {
+                                        bloecke.add(block);
+                                    }
+                                    
+                                    
                                 }
                             
                             }
                         }
                         if(!bloecke.contains(block))
                         {
-                            bloecke.add(block);
+                            //Collections.sort(block);
+                            if(block.size() > 2)
+                                    {
+                                        bloecke.add(block);
+                                    }
+                            
                         }
                         
                     }
+                    /*if(!bloecke.contains(block))
+                        {
+                            //Collections.sort(block);
+                            bloecke.add(block);
+                            
+                        }*/
                     
                         
                 }
+                
             }
+            workWithoutEdges = removeKantenBlock(workWithoutEdges, bloecke, workWithoutEdges.artikulationen());
+            }
+            
+            
+            
+            // alle kanten löschen die die jetzigen bloecke beinhalten
+           // Iterator<ArrayList<Integer>> itbloecke = bloecke.iterator();
+            
+            
             
             
             
@@ -740,6 +791,111 @@ public class Matrix implements Serializable, MatrixInt {
             return bloecke;
         }
 
+        /**
+         * 
+         * @param matrix
+         * @param kanten
+         * @param artikulationen
+         * @return Matrix - Liefert eine Matrix zurück in der alle Kanten gelöscht wurden die mit den Knoten der übergebenen Komponenten inzident sind. Jedoch nicht die Kanten der übergeben Artikulationen.
+         */
+        private Matrix removeKantenBlock(Matrix matrix, ArrayList<ArrayList<Integer>> kanten, ArrayList<Integer> artikulationen)
+        {
+            Matrix erg = new Matrix(matrix);
+            ArrayList<Integer> bruckenKnoten = brueckenKnotenList();
+            //System.out.println("Brückenknotenliste: " + bruckenKnoten.toString());
+            
+            //ArrayList<Integer> artikulationen = artikulationen();
+            Iterator <ArrayList<Integer>> itblock = kanten.iterator();
+            while(itblock.hasNext())
+            {
+               ArrayList<Integer> block = itblock.next();
+               for(int j = 0; j < block.size(); j++)
+               {
+                    Integer knoten = block.get(j);
+               
+                    
+                        
+                        
+                         
+                            if(!artikulationen.contains(knoten))
+                            {
+                                
+                                    
+                                    if(bruckenKnoten.contains(knoten))
+                                    {
+                                        if(erg.getKnotenGrad(knoten -1) == 1)
+                                        {
+                                            for(int i = 0; i < erg.getDimension(); i++)
+                                            {
+                                                erg.setValueAt(knoten-1, i, 0);
+                                                erg.setValueAt(i, knoten-1, 0);
+                                            }
+                                        }
+                                    }
+                                    if(!bruckenKnoten.contains(knoten))
+                                    {
+                                        for(int i = 0; i < erg.getDimension(); i++)
+                                        {
+                                            erg.setValueAt(knoten-1, i, 0);
+                                            erg.setValueAt(i, knoten-1, 0);
+                                        }
+                                    }
+                                
+                                
+                            }
+                        
+                    
+                    
+               }
+               
+            }
+            
+            return erg;
+        
+        }
+        
+        private ArrayList<Integer> brueckenKnotenList()
+        {
+            ArrayList<Integer> erg = new ArrayList<Integer>();
+            ArrayList<ArrayList<Integer>> bruecken = bruecken();
+            Iterator<ArrayList<Integer>> it = bruecken.iterator();
+            while(it.hasNext())
+            {
+                erg.addAll(it.next());
+                
+            }
+            return erg;
+        }
+        
+        /**
+         * Ein Graph ist dann ein Wald wenn er nicht zusammenhängend ist und die Anzahl der Kangen gleich der Anzahl der Knoten minus der Anzahl der Komponenten ist.
+         * @return True wenn der Graph ein Wald ist oder False wenn der Graph kein Wald ist
+         */
+        public boolean isWald()
+        {
+            
+            if(!zusammenhaengend() && getKantenAnzahl() == (getDimension() - komponenten().size()))
+            {
+                return true;
+            }
+            return false;
+            
+        }
+        
+        /**
+         * Ein Graph ist dann ein Baum wenn er um einen Knoten mehr hat als Kanten und der Graph zusammenhängend ist.
+         * @return True wenn der Graph ein Baum ist oder False wenn der Graph kein Baum ist
+         * 
+         */
+        public boolean isBaum()
+        {
+            if(zusammenhaengend() && getDimension() - getKantenAnzahl() == 1)
+            {
+                return true;
+            }
+            return false;
+        }
+        
 	/**
          * Gibt alle Kanten zurück. Wird für die Graphdarstellung der GUI benötigt.
          * @return selektierteKanten - Gibt alle Kanten als ArrayList zurück

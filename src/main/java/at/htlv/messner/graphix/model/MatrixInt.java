@@ -1,7 +1,11 @@
 package at.htlv.messner.graphix.model;
 
 import java.util.ArrayList;
-
+/**
+ * 
+ * @author Gregor Messner
+ * 
+ */
 public interface MatrixInt 
 {
 	public int getDimension();

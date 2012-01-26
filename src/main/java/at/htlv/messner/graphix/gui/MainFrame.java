@@ -49,7 +49,7 @@ public class MainFrame extends JFrame {
 	public MainFrame() throws IOException {
 		setSize(950, 740);
 
-		setTitle(APPLICATION_TITLE + " \u00a9 Gregor Messner 2011");
+		setTitle(APPLICATION_TITLE);
 		setLocationByPlatform(true);
 		setDefaultLookAndFeelDecorated(true);
 

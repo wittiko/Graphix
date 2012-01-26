@@ -1,45 +1,65 @@
-﻿package at.spengergasse.rathkolb.model.matrix;
+package at.htlv.messner.graphix.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
-
-public class Matrix implements Serializable {
+/**
+ * 
+ * 
+ * @author Gregor Messner
+ *
+ */
+public class Matrix implements Serializable, MatrixInt {
 	private static final long serialVersionUID = -7528821221945142099L;
 
-	// Die Werte der Matrix werden in einem 2-dimensionalen Array gespeichert,
-	// welches immer quadratisch sein wird. Es kann ganzzahlige Werte speichern.
+	
+	/**
+	 * 2-dimensionales Array, welches immer quadratisch sein wird.
+	 */
 	private final int[][] values;
 
-	// Standard-Größe wird mit 8 festgelegt.
-	public final static int DEFAULT_SIZE = 8;
+	
+	/**
+	 * Die Standardgröße der Matrix
+	 */
+	public final static int DEFAULT_SIZE = 7;
 
-	// Der parameterlose Konstruktor erzeugt eine leere Matrix der
-	// Standardgröße.
-	public Matrix() {
+	/**
+	 *  Parameterloser Konstruktor wo die Standardgröße übernommen wird.
+	 */
+	public Matrix() 
+        {
 		this(DEFAULT_SIZE);
 	}
 
-	// Der Benutzer kann die gewünschte Größe der Matrix angeben, sie muss
-	// zwischen 0 und 15 liegen.
-	public Matrix(int dimension) {
-		if (dimension < 0 || dimension > 15) {
+	/**
+	 * Konstruktor wo Matrixgröße zwischen 1 und 15 übergeben werden kann.
+	 * @param size
+	 */
+	
+	public Matrix(int size) 
+	{
+		if (size < 1 || size > 15) 
+                {
 			throw new IllegalArgumentException(
 					"illegal dimension. expected value: between 0 and 15 (inclusive), actual value: "
-							+ dimension);
-		}
-		// Erstelle ein neues, leeres Array zur Darstellung der Matrix. Alle
-		// Werte sind am Anfang (per Default) 0.
-		values = new int[dimension][dimension];
+							+ size);
+                }
+		values = new int[size][size];
 	}
 
-	// Copy-Konstruktor, kopiert die Daten der übergebenen Matrix in eine neue.
-	public Matrix(Matrix original) {
-		// Erstelle zuerst eine neue Matrix der Größe der übergebenen Matrix.
+	
+	/**
+	 * Kopiert die übergebene Matrix in das Attribut dieses Objektes.
+	 * @param original
+	 * 
+	 */
+	public Matrix(Matrix original) 
+        {
+		// Erstellt zuerst eine neue Matrix der übergebenen Größe.
 		this(original.getDimension());
-		// Durchlaufe alle Zeilen und spalten der Original-Matrix und kopiere
-		// sämtliche Werte in die neue Matrix.
+		// Durchlaufe alle Zeilen und Spalten und kopiere sämtliche Werte.
 		for (int row = 0; row < original.getDimension(); row++) {
 			for (int column = 0; column < original.getDimension(); column++) {
 				setValueAt(row, column, original.getValueAt(row, column));
@@ -47,22 +67,34 @@ public class Matrix implements Serializable {
 		}
 	}
 
-	// Die Dimension entspricht der Länge des 2-dimensionalen Arrays (und auch
-	// der Breite, da es quadratisch ist).
-	public int getDimension() {
+	/**
+         * 
+         * @return dimension - Die Größe der Matrix
+         */
+	public int getDimension() 
+        {
 		return values.length;
 	}
 
-	// Frage den Wert für eine Zeile und Spalte ab.
-	public int getValueAt(int row, int column) {
-		if (row < 0 || row >= values.length) {
+	/**
+	 * Liefert einen Wert an der übergebenen Position zurück.
+	 * @param row
+	 * @param column
+	 * @return value
+	 * 
+	 */
+	public int getValueAt(int row, int column) 
+	{
+		if (row < 0 || row >= values.length) 
+                {
 			throw new IllegalArgumentException(
 					"illegal row index. expected value: between 0 and "
 							+ values.length + " (inclusive), actual value: "
 							+ row);
 		}
 
-		if (column < 0 || column >= values[row].length) {
+		if (column < 0 || column >= values[row].length) 
+                {
 			throw new IllegalArgumentException(
 					"illegal column index. expected value: between 0 and "
 							+ values[row].length
@@ -71,15 +103,24 @@ public class Matrix implements Serializable {
 		return values[row][column];
 	}
 
-	// Setze den Wert für eine bestimmte Zeile und Spalte.
-	public void setValueAt(int row, int column, int value) {
-		if (row < 0 || row >= values.length) {
+	/**
+	 * Setzte den übergebenen Wert an der übergebenen Position.
+	 * @param row
+	 * @param column
+	 * @param value
+	 * 
+	 */
+	public void setValueAt(int row, int column, int value) 
+        {
+		if (row < 0 || row >= values.length) 
+                {
 			throw new IllegalArgumentException(
 					"illegal row index. expected value: between 0 and "
 							+ values.length + " (inclusive), actual value: "
 							+ row);
 		}
-		if (column < 0 || column >= values[row].length) {
+		if (column < 0 || column >= values[row].length) 
+                {
 			throw new IllegalArgumentException(
 					"illegal column index. expected value: between 0 and "
 							+ values[row].length
@@ -88,448 +129,621 @@ public class Matrix implements Serializable {
 		values[row][column] = value;
 	}
 
-	// Multipliziert die aktuelle Matrix mit der übergebenen Matrix und gibt
-	// eine neue Matrix als Ergebnis zurück.
-	public Matrix multiply(Matrix otherMatrix) {
-		if (otherMatrix.getDimension() != getDimension()) {
+	/**
+	 * Multipliziert die übergebene Matrix mit der aktuellen und gibt die daraus resultierende Matrix zurück.
+	 * @param matrix
+	 * @return result
+	 * 
+	 */
+	public Matrix multiply(Matrix otherMatrix) 
+        {
+		if (otherMatrix.getDimension() != getDimension()) 
+                {
 			throw new IllegalArgumentException(
 					"illegal matrix size, must have same dimensions.");
 		}
-		// Erstelle eine neue leere Matrix, welche das Ergebnis aufnehmen soll.
+
+		// Erstelle eine neue leere Matrix, welche das Ergebnis aufnimmt.
 		Matrix resultMatrix = new Matrix(getDimension());
 		// Multipliziere die zwei Matrizen.
-		for (int row = 0; row < resultMatrix.values.length; row++) {
-			for (int column = 0; column < resultMatrix.values[row].length; column++) {
-				for (int otherColumn = 0; otherColumn < resultMatrix
-						.getDimension(); otherColumn++) {
-					resultMatrix.values[row][column] += values[row][otherColumn]
-							* otherMatrix.values[otherColumn][column];
+		for (int row = 0; row < resultMatrix.values.length; row++) 
+                {
+			for (int column = 0; column < resultMatrix.values[row].length; column++) 
+                        {
+				for (int otherColumn = 0; otherColumn < resultMatrix.getDimension(); otherColumn++) 
+                                {
+					resultMatrix.values[row][column] += values[row][otherColumn] * otherMatrix.values[otherColumn][column];
 				}
 			}
 		}
-		// Gebe die Matrix zurück, welche das Ergebnis enthält.
 		return resultMatrix;
 	}
 
-	// Gibt die n-te Potenz der aktuellen Matrix zurück.
-	public Matrix power(int n) {
-		if (n < 1) {
+	/**
+	 * Gibt die Potenz einer Matrix mit dem übergebenen Wert zurück.
+	 * @param n
+	 * @return result
+	 */
+	public Matrix power(int n) 
+        {
+		if (n < 1) 
+                {
 			throw new IllegalArgumentException(
 					"illegal power. expected: n >= 1, actual: " + n);
 		}
-		// Erstelle eine Kopie der aktuellen Matrix (entspricht der 1. Potenz.
 		Matrix resultMatrix = new Matrix(this);
-		// Für jeden weiteren Potenzschritt jenseits 1 ist eine Multiplikation
-		// mit der Original-Matrix notwendig.
-		for (int i = 1; i < n; i++) {
+		for (int i = 1; i < n; i++) 
+                {
 			resultMatrix = resultMatrix.multiply(this);
 		}
-		// Gebe die potenzierte Matrix zurück.
 		return resultMatrix;
 	}
+        
+        /**
+         * 
+         * @return knotenGrade - Liefert ein Array mit den KnotenGraden zurück
+         */
+        public int[] getKnotenGrad()
+        {
+            int[] knotenGrade = new int[getDimension()];
+            for(int i = 0; i < getDimension(); i++)
+            {
+                knotenGrade[i] = getKnotenGrad(i);
+            }
+            return knotenGrade;
+        }
+        
+        /**
+         * 
+         * @param knoten
+         * @return knotengrad - Liefert den Knotengrad des übergebenen Knotens zurück
+         */
+        public int getKnotenGrad(int knoten)
+        {
+            int knotenGrad = 0;
+            if(knoten < getDimension())
+            {
+                for(int i = 0; i < getDimension(); i++)
+                {
+                    knotenGrad += getValueAt(knoten, i);
+                }
+            }
+            return knotenGrad;
+        }
 
-	// Berechnet die Wegmatrix für die aktuell eingegebene Adjazenzmatrix.
+	/**
+	 * Berechnet die Wegmatrix und gibt sie zurück.
+	 * @return wegmatrix
+	 * 
+	 */
 	public Matrix wegMatrix() {
-		// Das Ergebnis ist wieder eine neue Matrix.
+
 		Matrix resultMatrix = new Matrix(getDimension());
-		// Die Diagonale wird auf 1 gesetzt.
-		for (int i = 0; i < resultMatrix.getDimension(); i++) {
-			resultMatrix.values[i][i] = 1;
-		}
-		// Durchlaufe alle Potenzen von 1 bis vor die Dimension.
-		for (int power = 1; power < getDimension(); power++) {
-			// Berechne die i-te Potenz der aktuellen Matrix.
-			Matrix powerMatrix = power(power);
-
-			boolean matrixUpdated = false;
-			// Durchlaufe alle Zeilen und Spalten.
-			for (int row = 0; row < powerMatrix.getDimension(); row++) {
-				for (int column = 0; column < powerMatrix.getDimension(); column++) {
-					// Enthält die Potenzmatrix für die aktuelle Zeile und
-					// Spalte einen Wert > 0, dann setze in der Ergebnismatrix
-					// diese Stelle auf 1.
-					if (powerMatrix.values[row][column] > 0) {
-						resultMatrix.values[row][column] = 1;
-						// Merke, dass die Matrix aktualisiert worden ist.
-						matrixUpdated = true;
-					}
-				}
-			}
-			// Ist die Matrix in der aktuellen Wiederholung nicht aktualisiert
-			// worden, dann breche ab.
-			if (!matrixUpdated) {
-				break;
-			}
-		}
-
-		// Gebe die Wegmatrix zurück.
+                for(int row = 0; row < resultMatrix.getDimension(); row++)
+                {
+                    for(int column = 0; column < resultMatrix.getDimension(); column++)
+                    {
+                        if(column == row)
+                        {
+                            resultMatrix.setValueAt(row, column, 1);
+                        }
+                        
+                    }
+                }
+                
+                for(int power = 1; power < resultMatrix.getDimension(); power++)
+                {
+                    boolean updated = false;
+                    boolean completed = true;
+                    Matrix potenzmatrix = power(power);
+                    // Wenn die Wegmatrix lauter 1er hat setze completed auf false
+                    for(int row = 0; row < resultMatrix.getDimension(); row++)
+                    {
+                        for(int column = 0; column < resultMatrix.getDimension(); column++)
+                        {
+                            if(resultMatrix.getValueAt(row, column) == 0)
+                            {
+                                completed = false;
+                            }
+                        }
+                    }
+                    for(int row = 0; row < resultMatrix.getDimension(); row++)
+                    {
+                        for(int column = 0; column < resultMatrix.getDimension(); column++)
+                        {
+                            if(potenzmatrix.getValueAt(row, column) > 0)
+                            {
+                                resultMatrix.setValueAt(row, column, 1);
+                                // setze updated auf true wenn ein Wert gesetzt wurde
+                                updated = true;
+                            }
+                        }
+                    }
+                    // Wenn sich die matrix nicht mehr geändert hat breche ab
+                    if(!updated)
+                    {
+                        break;
+                    }
+                    // Wenn es nur mehr 1er gibt breche ab
+                    if(completed)
+                    {
+                        break;
+                    }
+                }
+                
+		
 		return resultMatrix;
 	}
 
-	public Matrix distanzMatrix() {
-		// Erstelle für das Ergebnis eine neue, leere Matrix.
+	
+	/**
+	 * Berechnet die Distanzmatrix und liefert diese zurück.
+	 * @return distanzmatrix
+	 */
+	public Matrix distanzMatrix() 
+        {
+
 		Matrix resultMatrix = new Matrix(getDimension());
-		// Setze alle Werte in der Matrix auf "unendlich", nur die Diagonale
-		// wird auf 0 gesetzt.
-		for (int row = 0; row < resultMatrix.getDimension(); row++) {
-			for (int column = 0; column < resultMatrix.getDimension(); column++) {
-				if (column == row) {
-					resultMatrix.values[row][column] = 0;
-				} else {
-					// Zur Darstellung des Wertes "unendlich" muss ein Umweg
-					// gewählt werden: Die Werte in der Matrix sind alle vom Typ
-					// int, der keine Konstante für den Wert "unendlich"
-					// enthält. Daher wird einfach eine Zahl für diesen Wert
-					// verwendet, die hoffentlich sonst keine Anwendung finden
-					// wird, Integer.MIN_VALUE - die kleinste int-Zahl - wird
-					// dafür gewählt.
-
-					// Das Panel, welches diese Matrix zeichnet, muss den Wert
-					// Integer.MIN_VALUE als "unendlich" interpretieren und das
-					// passende Zeichen dafür zeichnen.
-					resultMatrix.values[row][column] = Integer.MIN_VALUE;
-				}
-			}
-		}
-
-		// Durchlaufe wieder alle Potenzen ab 1 bis vor die Dimension.
-		for (int power = 1; power < getDimension(); power++) {
-			// Berechne die aktuelle Potenz der aktuellen Matrix.
-			Matrix powerMatrix = power(power);
-
-			boolean matrixUpdated = false;
-			// Durchlaufe alle Zeilen und Spalten.
-			for (int row = 0; row < powerMatrix.getDimension(); row++) {
-				for (int column = 0; column < powerMatrix.getDimension(); column++) {
-					// Ist der Wert in der Potenzmatrix > 0 und in der
-					// Ergebnismatrix "unendlich", dann soll in der
-					// Ergebnismatrix an dieser Stelle die Potenzgröße als Wert
-					// übernommen werden. In allen anderen Fällen (wenn z. B. in
-					// der Ergebnismatrix schon ein Wert != "unendlich" steht,
-					// soll nichts übernommen werden.)
-					if (powerMatrix.values[row][column] > 0
-							&& resultMatrix.values[row][column] == Integer.MIN_VALUE) {
-						resultMatrix.values[row][column] = power;
-						// Merke, dass sich die Matrix geändert hat.
-						matrixUpdated = true;
-					}
-				}
-			}
-			// Hat sich die Matrix nicht geändert, dann breche die Berechnung
-			// ab.
-			if (!matrixUpdated) {
-				break;
-			}
-		}
-		// Gebe das Ergebnis zurück.
+                for(int row = 0; row < resultMatrix.getDimension(); row++)
+                {
+                    for(int column = 0; column < resultMatrix.getDimension(); column++)
+                    {
+                        if(row == column)
+                        {
+                            resultMatrix.setValueAt(row, column, 0);
+                        }
+                        if(row != column)
+                        {
+                            resultMatrix.setValueAt(row, column, Integer.MIN_VALUE);
+                        }
+                        
+                    }
+                }
+                
+                for(int power = 1; power < resultMatrix.getDimension(); power++)
+                {
+                    boolean updated = false;
+                    boolean completed = true;
+                    Matrix potenzmatrix = power(power);
+                    // Wenn die Distanzmatrix kein unendlich mehr hat setze completed auf true
+                    for(int row = 0; row < resultMatrix.getDimension(); row++)
+                    {
+                        for(int column = 0; column < resultMatrix.getDimension(); column++)
+                        {
+                            if(resultMatrix.getValueAt(row, column) == Integer.MIN_VALUE)
+                            {
+                                completed = false;
+                            }
+                        }
+                    }
+                    for(int row = 0; row < resultMatrix.getDimension(); row++)
+                    {
+                        for(int column = 0; column < resultMatrix.getDimension(); column++)
+                        {
+                            if(potenzmatrix.getValueAt(row, column) > 0 && resultMatrix.getValueAt(row, column) == Integer.MIN_VALUE)
+                            {
+                                resultMatrix.setValueAt(row, column, power);
+                                // setze updated auf true wenn ein Wert gesetzt wurde
+                                updated = true;
+                            }
+                        }
+                    }
+                    // Wenn sich die matrix nicht mehr geändert hat breche ab
+                    if(!updated)
+                    {
+                        break;
+                    }
+                    // Wenn es nur mehr 1er gibt breche ab
+                    if(completed)
+                    {
+                        break;
+                    }
+                }
+                
+		
 		return resultMatrix;
 	}
 
-	public int[] exzentrizitaeten() {
-		// Die Exzentrizitäten berechnen sich aus den Maxima der Zeilen der
-		// Distanzmatrix.
+	// Berechnung der Exzentrizit�ten
+	/**
+	 * Berechnet die Exzentritäten und gibt diese als Array zurück.
+	 * @return result
+	 * 
+	 */
+	public int[] exzentrizitaeten() 
+        {
+
 		Matrix distanzMatrix = distanzMatrix();
-		// Erstelle ein Array, das genau so groß ist, wie die Distanzmatrix hoch
-		// ist. An jeder Stelle des Arrays wird das Maximum für die aktuelle
-		// Zeile gespeichert werden.
 		int[] exzentrizitaeten = new int[distanzMatrix.getDimension()];
 		// Durchlaufe alle Zeilen und Spalten.
-		for (int row = 0; row < distanzMatrix.getDimension(); row++) {
-			for (int column = 0; column < distanzMatrix.getDimension(); column++) {
-				// Bestimmte, welcher Wert größer ist: Der Bisher für diese
-				// Zeile gespeicherte, oder der in der Distanzmatrix für diese
-				// Zeile und Spalte stehende. Die Methode Math.max gibt den
-				// größeren der beiden zurück, der in das Array geschrieben
-				// wird.
-				exzentrizitaeten[row] = Math.max(exzentrizitaeten[row],
-						distanzMatrix.values[row][column]);
-			}
-		}
-		// Gebe die Exzentrizitäten zurück. Dieses Array wird von der Berechnung
-		// des Durchmessers, Radius und des Zentrums verwendet.
+		for(int row = 0; row < distanzMatrix.getDimension(); row++)
+                {
+                    for(int column = 0; column < distanzMatrix.getDimension(); column++)
+                    {
+                        exzentrizitaeten[row] = Math.max(distanzMatrix.getValueAt(row, column), exzentrizitaeten[row]);
+                    }
+                }
+                for(int i = 0; i < exzentrizitaeten.length; i++)
+                {
+                    System.out.println(exzentrizitaeten[i]);
+                }
 		return exzentrizitaeten;
 	}
 
-	// Der Radius ist der kleinste Exzentrizitätswert.
+	/**
+	 * Berechnet den Radius und gibt diesen zurück.
+	 * Der Radius entspricht der kleinsten Exzentrität.
+	 * @return radius
+	 */
 	public int radius() {
-		// Hole die Exzentrizitäten.
+		// Hole die Exzentrizit�ten.
 		int[] exzentrizitaeten = exzentrizitaeten();
 		// Es wird angenommen, dass der 0. Wert der kleinste ist; das wird nur
-		// gemacht, damit der Radius schon beim ersten Vergleich einen Wert aus
-		// der Menge möglicher Ergebnisse enthält. Würde man als
-		// Initialisierungswert z. B. einfach 0 nehmen, aber kein Wert der
-		// Exzentrizitäten wäre 0, dann würde diese dazu führen, dass die
-		// Methode den falchen Radius 0 als Ergebnis zurück geben würde.
+		// gemacht, damit der Radius schon beim ersten Vergleich einen Werte aus
+		// der Menge m�glicher Ergebnisse enth�lt.
 		int radius = exzentrizitaeten[0];
-		// Durchlaufe alle restlichen Elemente ab der Stelle 1 und speichere
-		// immer das kleinere Element im Radius ab.
-		for (int row = 1; row < exzentrizitaeten.length; row++) {
-			radius = Math.min(radius, exzentrizitaeten[row]);
-		}
-		// Gebe den Radius zurück.
+                for(int i = 0; i < exzentrizitaeten.length; i++)
+                {
+                    radius = Math.min(exzentrizitaeten[i], radius);
+                }
+		
 		return radius;
 	}
 
-	// Der Durchmesser ist der größte Exzentrizitätswert.
+	/**
+	 * Berechnet den Durchmesser und gibt diesen zurück.
+	 * Der Durchmesser entspricht der größten Exzentrität.
+	 * @return durchmesser
+	 */
 	public int durchmesser() {
-		// Berechnet sich wie der Radius, nur wird hier nach dem Maximum, nicht
-		// nach dem Minimum, gesucht.
+		// Berechnet sich wie der Radius, nur wird hier nach dem Maximum
+		// gesucht.
 		int[] exzentrizitaeten = exzentrizitaeten();
-
 		int durchmesser = exzentrizitaeten[0];
-		for (int i = 1; i < exzentrizitaeten.length; i++) {
-			durchmesser = Math.max(durchmesser, exzentrizitaeten[i]);
-		}
+                for(int i = 0; i < exzentrizitaeten.length; i++)
+                {
+                    durchmesser = Math.max(exzentrizitaeten[i], durchmesser);
+                }
+
+		
 		return durchmesser;
 	}
 
-	// Zentren sind die Knoten, deren Exzentrizitätswert dem Radius entspricht.
+	/**
+	 * Berechnet das Zentrum und gibt dieses zurück.
+	 * Das Zentrum entspricht der Menge der Knoten die die Exzentrität des Radius haben.
+	 */
 	public ArrayList<Integer> zentrum() {
-		// Berechne die Exzentrizitäten und den Radius.
+		// Berechne die Exzentrizit�ten und den Radius.
 		int[] exzentrizitaeten = exzentrizitaeten();
 		int radius = radius();
-		// Erstelle eine Liste für die Knoten (nicht Positionen). Eine Liste ist
-		// dynamisch und deshalb gut geeignet, da anfangs unbekannt ist, wieviel
-		// Zentren es geben wird.
+		// Erstelle eine Liste (dynamisch) f�r die Knoten.
 		ArrayList<Integer> zentren = new ArrayList<Integer>();
-		// Durchlaufe alle Exzentrizitäten. Entspricht der Wert für den
-		// aktuellen Knoten dem Radius, dann lege den Knoten in der Liste ab.
-		for (int row = 0; row < exzentrizitaeten.length; row++) {
-			if (exzentrizitaeten[row] == radius) {
-				// Da row dem Index des Knotens entspricht, muss für den Knoten
-				// row + 1 abgelegt werden (Index 0 entspricht Knoten 1, Index 1
-				// Knoten 2, usw.)
-				zentren.add(row + 1);
-			}
-		}
-		// Gebe die Zentren zurück.
+                for(int i = 0; i < exzentrizitaeten.length; i++)
+                {
+                    if(exzentrizitaeten[i] == radius)
+                    {
+                        zentren.add(i + 1);
+                    }
+                }
+		
 		return zentren;
 	}
 
-	// Ein Graph ist zusammenhängend, wenn in der Wegmatrix alle Elemente 1 sind
-	// (also jeder Knoten von jedem aus erreichbar ist).
-	public boolean zusammenhaengend() {
-		Matrix wegMatrix = wegMatrix();
-		// Durchlaufe alle Zeilen und Spalten.
-		for (int row = 0; row < wegMatrix.getDimension(); row++) {
-			for (int column = 0; column < wegMatrix.getDimension(); column++) {
-				if (wegMatrix.values[row][column] != 1) {
-					// Wird eine Zelle gefunden, für die der Wert nicht 1 ist,
-					// dann gibt es keinen Weg dort hin, der Graph ist auch
-					// nicht mehr zusammenhängend.
-					return false;
-				}
-			}
-		}
-		// Sind alle Elemente 1, dann wurde die if-Anweisung nie betreten, und
-		// am Ende wird festgestellt, dass der Graph zusammenhängend ist.
-		return true;
+	/**
+         * Überprüft ob der Graph zusammenhängend ist
+         * @return true wenn sich in der Webmatrix nur 1er befinden, false wenn es einen anderen Wert gibt
+         */
+	public boolean zusammenhaengend() 
+        {
+            Matrix weg = wegMatrix();
+            for(int row = 0; row < weg.getDimension(); row++)
+            {
+                for(int column = 0; column < weg.getDimension(); column++)
+                {
+                    if(weg.getValueAt(row, column) != 1)
+                    {
+                        return false;
+                    }
+                }
+            }
+		
+            return true;
 	}
 
-	// Berechnet die Komponenten auf Basis der Wegmatrix des aktuellen Knotens.
-	public ArrayList<ArrayList<Integer>> komponenten() {
+	/**
+         * Berechnet auf Basis der Wegmatrix die Komponenten
+         * @return komponenten - Liefert die Komponenten zurück
+         */
+	public ArrayList<ArrayList<Integer>> komponenten() 
+        {
 		return komponenten(wegMatrix());
 	}
 
-	// Lässt den Benutzer die Wegmatrix übergeben, für welche die Komponenten
-	// berechnet werden sollen. Eine Komponente ist ein Teilgraph.
-	private ArrayList<ArrayList<Integer>> komponenten(Matrix wegMatrix) {
-		// Erstelle eine Liste, welche mehrere Komponenten aufnehmen kann. Jede
-		// Komponente wird durch die Knoten beschrieben, aus der sie sich
-		// zusammen setzt.
+	/**
+         * 
+         * @param wegMatrix
+         * @return komponenten - Liefert die Komponenten zurück
+         */
+	private ArrayList<ArrayList<Integer>> komponenten(Matrix wegMatrix) 
+        {
+		// Erstelle eine Liste, welche mehrere Komponenten aufnehmen kann.
 		ArrayList<ArrayList<Integer>> komponenten = new ArrayList<ArrayList<Integer>>();
-
-		for (int row = 0; row < wegMatrix.getDimension(); row++) {
-			// Erstelle eine neue leere Liste für die aktuelle Komponente.
-			ArrayList<Integer> neueKomponente = new ArrayList<Integer>();
-			// Füge alle Knoten ein, die von der aktuellen Zeile aus erreichbar
-			// sind. Zusammen bilden sie eine Komponente.
-			for (int column = 0; column < wegMatrix.getDimension(); column++) {
-				if (wegMatrix.values[row][column] == 1) {
-					neueKomponente.add(column + 1);
-				}
+                for(int row = 0; row < wegMatrix.getDimension(); row++)
+                {
+                    ArrayList<Integer> neueKomponente = new ArrayList<Integer>();
+                    for(int column = 0; column < wegMatrix.getDimension(); column++)
+                    {
+                        if(wegMatrix.getValueAt(row, column) == 1)
+                        {
+                            neueKomponente.add(column + 1);
+                        }
+                    }
+                    if(!neueKomponente.isEmpty())
+                    {
+                        boolean ablegen = true;
+                        Iterator<ArrayList<Integer>> it = komponenten.iterator();
+                        while(it.hasNext())
+                        {
+                            ArrayList<Integer> komponente = it.next();
+                            if (komponente.containsAll(neueKomponente)) 
+                            {
+				ablegen = false;
+				break;
+                            }
+                            if (neueKomponente.containsAll(komponente)) 
+                            {
+				it.remove();
+                            }
+                            
+                        }
+                        if (ablegen) 
+                        {
+                            komponenten.add(neueKomponente);
 			}
-			// Ist die Komponente nicht leer, dann kann sie potentiell in die
-			// Liste der Komponenten eingefügt werden.
-			if (!neueKomponente.isEmpty()) {
-				// Merke, ob sie tatsächlich abgelegt werden soll, oder nicht.
-				boolean ablegen = true;
-				// Durchlaufe alle bereits abgelegten Komponenten mit einem
-				// Iterator. Der Iterator ist nötig, damit während des
-				// Durchlaufend existierende Komponenten aus der Liste von
-				// Komponenten entfernt werden können.
-				for (Iterator<ArrayList<Integer>> kompIt = komponenten
-						.iterator(); kompIt.hasNext();) {
-					// Lese die aktuelle existierende Komponente aus.
-					ArrayList<Integer> komponente = kompIt.next();
-					// Überprüfe, ob diese aktuelle Komponente die neue
-					// Komponente bereits vollständig enthält. Wenn ja, dann
-					// muss die neue nicht mehr abgelegt werden, die Variable
-					// wird entsprechend gesetzt und die Schleife vorzeitig
-					// abgebrochen.
-					if (komponente.containsAll(neueKomponente)) {
-						ablegen = false;
-						break;
-					}
-					// Enthält die neue Komponente jedoch die existierende, dann
-					// ist die neue größer als die existierende, die
-					// existierende ist also eine Teilmenge der neuen. Die
-					// existierende wird daher aus der Liste entfernt.
-					if (neueKomponente.containsAll(komponente)) {
-						kompIt.remove();
-					}
-				}
-				// Soll die neue Komponente immer noch abgelegt weden, dann wird
-				// das gemacht.
-				if (ablegen) {
-					komponenten.add(neueKomponente);
-				}
-			}
-		}
+                    }
+                }
 
-		// Gebe die Komponenten zurück.
+		
 		return komponenten;
 	}
 
-	// Wenn man einen Knoten aus der Matrix entfernt, und das zu einer höheren
-	// Anzahl an Komponenten führt, dann ist dieser Knoten eine Artikulation.
+	/**
+         * Berechnet die Artikulationen auf Basis der Komponenten
+         * @return artikulationen - Liefert die Artikulationen als ArrayList zurück
+         */
 	public ArrayList<Integer> artikulationen() {
-		// Merke die ursprüngliche Anzahl an Komponenten.
 		int komponenten = komponenten().size();
-		// Erstelle eine leere Liste, in der die Knoten aufgenommen werden,
-		// welche Artikulationen sind.
+		
 		ArrayList<Integer> artikulationen = new ArrayList<Integer>();
-		// Durchlaufe alle Knoten.
-		for (int entfernterKnoten = 0; entfernterKnoten < getDimension(); entfernterKnoten++) {
-			// Erstelle eine Kopie der Adjazenzmatrix.
-			Matrix copy = new Matrix(this);
-			// Entferne sämtliche Verbindungen für den aktuellen Knoten (Zeile
-			// und Spalte wird auf 0 gesetzt).
-			for (int i = 0; i < getDimension(); i++) {
-				copy.setValueAt(entfernterKnoten, i, 0);
-				copy.setValueAt(i, entfernterKnoten, 0);
-			}
-			// Berechne für die geänderte Adjazenzmatrix die Wegmatrix und für
-			// diese die Komponenten.
-			ArrayList<ArrayList<Integer>> aktuelleKomponenten = komponenten(copy
-					.wegMatrix());
-			// Der aktuelle Knoten wird immer bei den Komponenten enthalten
-			// sein, denn nur seine Verbindungen wurden gelöscht, er ist aber
-			// noch immer Teil des Graphens. Deshalb muss er der Knoten, der nun
-			// garantiert als "Insel" auftaucht, aus der Liste von Komponenten
-			// entfernt werden. Dazu wird eine Liste angelegt, die nur diesen
-			// Knoten enthält, anschließend wird sie aus der Liste von
-			// Komponenten entfernt.
-			ArrayList<Integer> listeMitKnoten = new ArrayList<Integer>();
-			listeMitKnoten.add(entfernterKnoten + 1);
-			aktuelleKomponenten.remove(listeMitKnoten);
-			// Anschließend wird überprüft, ob die neu entstandene Liste mehr
-			// Komponenten enthält, als die ursprüngliche. Wenn ja, dann wurde
-			// eine neue Artikulation gefunden, und der Knoten dazu wird
-			// gespeichert.
-			if (aktuelleKomponenten.size() > komponenten) {
-				artikulationen.add(entfernterKnoten + 1);
-			}
-		}
-		// Gebe die Artikulationen zurück.
+                for(int aktknoten = 0; aktknoten < getDimension(); aktknoten++)
+                {
+                    Matrix work = new Matrix(this);
+                    for(int i = 0; i < getDimension(); i++)
+                    {
+                        work.setValueAt(aktknoten, i, 0);
+                        work.setValueAt(i, aktknoten, 0);
+                        
+                    }
+                    ArrayList<ArrayList<Integer>> aktuelleKomponenten = komponenten(work.wegMatrix());
+                    if (aktuelleKomponenten.size() - 1 > komponenten) 
+                    {
+                        artikulationen.add(aktknoten + 1);
+                    }
+                }
+		
 		return artikulationen;
 	}
 
-	// Brücken sind Kanten, deren Entfernung die Anzahl der Komponenten im
-	// Graphen erhöht.
-	public ArrayList<ArrayList<Integer>> bruecken() {
-
-		// Merke die Brücken als Paare von Knotennummern.
+	/**
+         * Berechnet die Brücken auf Basis der Komponenten
+         * @return bruecken - Liefert die Brücken als ArrayList zurück.
+         */
+	public ArrayList<ArrayList<Integer>> bruecken() 
+        {
 		ArrayList<ArrayList<Integer>> bruecken = new ArrayList<ArrayList<Integer>>();
-		// Erstelle eine Kopie der ursprünglichen Matrix und merke, wieviel
-		// Komponenten sie hat.
-		Matrix copy = new Matrix(this);
-		int komponenten = copy.komponenten().size();
-		// Jede Zeile und Spalte wird durchlaufen, damit jede Kante einzeln
-		// entfernt weden kann.
-		for (int row = 0; row < copy.getDimension(); row++) {
-			for (int column = 0; column < copy.getDimension(); column++) {
-				if (copy.values[row][column] == 1) {
-					// Ist die aktuelle Kante gesetzt, dann setze sie in beide
-					// Richtungen auf 0.
-					copy.values[row][column] = 0;
-					copy.values[column][row] = 0;
-					// Berechne für diese geänderte Matrix die Wegmatrix, und
-					// für diese die Komponenten. Übersteigen sie die
-					// ursprüngliche Anzahl an Komponenten, dann ist die
-					// verarbeitete Kante eine Brücke, die gemerkt werden muss.
-					if (komponenten(copy.wegMatrix()).size() > komponenten) {
-						// Erstelle eine leere Liste.
-						ArrayList<Integer> bruecke = new ArrayList<Integer>();
-						// Schreibe die zwei Knoten in die Liste, welche die
-						// Kante bilden. Schreibe die Knoten in der Reihenfolge,
-						// dass zuerst der kleinere Knoten, dann der größere
-						// Knoten geschrieben wird. Die Reihenfolge wird
-						// eingehalten, damit zwei Listen [2, 3] und [3, 2] als
-						// gleich erkannt werden, indem sie immer als [2, 3]
-						// geschrieben werden. Achtung: Womöglich ist diese
-						// Sortierung der Liste nicht nötig, man könnte es
-						// überprüfen, indem man einfach x und y direkt in die
-						// Liste schreibt.
-						bruecke.add(Math.min(column + 1, row + 1));
-						bruecke.add(Math.max(column + 1, row + 1));
-						// Wenn die Brücken die neue Brücke noch nicht
-						// enthalten, dann wird die neue Brücke in die Liste mit
-						// aufgenommen.
-						if (!bruecken.contains(bruecke)) {
-							bruecken.add(bruecke);
-						}
-					}
-					// Setze die Kante wieder zurück, damit die Matrix für die
-					// nächste Berechnung korrigiert wird.
-					copy.values[row][column] = 1;
-					copy.values[column][row] = 1;
-				}
-			}
-		}
-		// Gebe die Brücken zurück.
+                Matrix work = new Matrix(this);
+		int komponenten = work.komponenten().size();
+                for(int row = 0; row < work.getDimension(); row++)
+                {
+                    for(int column = 0; column < work.getDimension(); column++)
+                    {
+                        if(work.getValueAt(row, column) == 1)
+                        {
+                            work.setValueAt(row, column, 0);
+                            work.setValueAt(column, row, 0);
+                        
+                            if(komponenten(work.wegMatrix()).size() > komponenten)
+                            {
+                                ArrayList<Integer> bruecke = new ArrayList<Integer>();
+                                bruecke.add(Math.min(column + 1, row + 1));
+                                bruecke.add(Math.max(column + 1, row + 1));
+                                if(!bruecken.contains(bruecke))
+                                {
+                                    bruecken.add(bruecke);
+                                }
+                            }
+                            work.values[row][column] = 1;
+                            work.values[column][row] = 1;
+                        }
+                    }
+                }
+		
 		return bruecken;
 	}
-
+        
+      
+       
+        
+        /**
+         * Berechnet die Kantenanzahl auf Basis der Adjazenzmatrix
+         * @return anzahl - Die Kantenanzahl
+         */
 	public int getKantenAnzahl() {
 		int anzahl = 0;
 
-		for (int row = 0; row < getDimension(); row++) {
-			for (int column = 0; column < getDimension(); column++) {
+		for (int row = 0; row < getDimension(); row++) 
+                {
+			for (int column = 0; column < getDimension(); column++) 
+                        {
 				if (values[row][column] == 1)
-					anzahl++;
+                                {
+                                    anzahl++;
+                                }
+					
 			}
 		}
-		System.out.println("Kantenanzahl " + anzahl / 2);
 		return anzahl / 2;
 	}
 
-	public boolean istBaum() {
-		return getKantenAnzahl() - getDimension() + komponenten().size() == 0
-				&& komponenten().size() == 1;
-	}
+	/**
+         * Berechnet die Blöcke auf Basis der Komponenten, Artikulationen und Brücken.
+         * @return bloecke - Gibt die Bloecke als ArrayList zurück.
+         */
+        public ArrayList<ArrayList<Integer>> bloecke()
+        {
+            
+            ArrayList<ArrayList<Integer>> bloecke = new ArrayList<ArrayList<Integer>>();
+            ArrayList<Integer> artikulationen = artikulationen();
+            ArrayList<ArrayList<Integer>> bruecken = bruecken();
+            // jede Brücke ist ein Block also der Liste hinzufügen
+            Iterator<ArrayList<Integer>> itb = bruecken.iterator();
+            while(itb.hasNext())
+            {
+                bloecke.add(itb.next());
+            }
+            // wenn es keine artikulationen gibt und der graph ist der gesamte graph ein block
+            // OK!
+            if(artikulationen.isEmpty() && zusammenhaengend())
+            {
+                ArrayList<Integer> artikulationsfrei = new ArrayList<Integer>();
+                for(int i = 0; i < getDimension(); i++)
+                {
+                    artikulationsfrei.add(i + 1);
+                }
+                bloecke.add(artikulationsfrei);
+            }
+            
+            
+            // ein isolierter knoten ist auch ein block
+            // OK!
+            int[] knotengrad = getKnotenGrad();
+            
+                
+            for(int i = 0; i < knotengrad.length; i++)
+            {
+                   
+                if(knotengrad[i] == 0)
+                {
+                    ArrayList<Integer> isolierterKnoten = new ArrayList<Integer>();
+                    isolierterKnoten.add(i + 1);
+                    bloecke.add(isolierterKnoten);
+                }
+                    
+            }
+            
+            // ein block ist der größte zusammenhängende artikulationsfrei teilgraph
+            Matrix work = new Matrix(this);
+            // berechne die komponenten am anfang
+            // nach entfernen der artikulationen bleiben nur mehr teile der blöcke über
+            // die teile der blöcke und die dazugehörige artikulation sind ein block
+            // 
+            ArrayList<ArrayList<Integer>> kompstart = work.komponenten();
+            Iterator<Integer> ita = artikulationen.iterator();
+            
+            
+            // entferne alle artikulationen aus der matrix
+            System.out.println(work.komponenten().size());
+            while(ita.hasNext())
+            {
+                Integer art = ita.next();
+                for(int i = 0; i < work.getDimension(); i++)
+                {
+                    work.setValueAt(art.intValue()-1, i, 0);
+                    work.setValueAt(i, art.intValue()-1, 0);
+                }
+            }
+            
+            // berechne die neuen komponenten
+            ArrayList<ArrayList<Integer>> kompend = work.komponenten();
+            Iterator<ArrayList<Integer>> itke = kompend.iterator();
+            Iterator<ArrayList<Integer>> itks = kompstart.iterator();
+            // solange es neue komponenten von der endberechnung gibt
+            Iterator<Integer> itaneu = artikulationen.iterator();
+            
+            // entferne alle komponenten die nur einen knoten haben
+            // dies sind isolierte knoten
+            // wenn es brücken sind wurden sie bereits hinzugefügt
+            // wenn es isolierte knoten sind wurden sie bereits hinzugefügt
+            while(itke.hasNext())
+            {
+                if(itke.next().size() == 1)
+                {
+                    itke.remove();
+                }
+            }
+            
+            // solange es komponenten im artikulationsfreien graphen gibt
+            Iterator<ArrayList<Integer>> itkegtone = kompend.iterator();
+            while(itkegtone.hasNext())
+            {
+                
+                // weise dem block die komponente zu
+                ArrayList<Integer> block = itkegtone.next();
+                for(int i = 0; i <  block.size(); i++)
+                {
+                    Integer knoten = block.get(i);
+                    // füge die artikulationen die mit einem knoten des blocks verbunden sind hinzu
+                    // wenn knoten ist keine artikulation
+                    if(!artikulationen.contains(knoten))
+                    {
+                        
+                    
+                        for(int j = 0; j < artikulationen.size(); j++)
+                        {
+                            Integer artikulation = artikulationen.get(j);
+                            if(getValueAt(knoten-1, artikulation-1) == 1)
+                            {
+                                if(!block.contains(artikulation))
+                                {
+                                    block.add(artikulation);
+                                }
+                                if(!bloecke.contains(block))
+                                {
+                                    bloecke.add(block);
+                                }
+                            
+                            }
+                        }
+                        if(!bloecke.contains(block))
+                        {
+                            bloecke.add(block);
+                        }
+                        
+                    }
+                    
+                        
+                }
+            }
+            
+            
+            
+            
+            
+            
+            //System.out.println(work.komponenten().size());
+            
+                
+                
+            
+            
+            return bloecke;
+        }
 
-	public boolean istWald() {
-		return getKantenAnzahl() - getDimension() + komponenten().size() == 0
-				&& komponenten().size() > 1;
-	}
-
-
-	public int anzahlBloecke() {
-		int aenderungen = komponenten().size();
-
-		for (int artikulation : artikulationen()) {
-			Matrix copy = new Matrix(wegMatrix());
-
-			for (int i = 0; i < getDimension(); i++) {
-				copy.setValueAt(artikulation - 1, i, 0);
-				copy.setValueAt(i, artikulation - 1, 0);
-			}
-			aenderungen += copy.komponenten().size() - komponenten().size();
-		}
-		return aenderungen;
-	}
-
+	/**
+         * Gibt alle Kanten zurück. Wird für die Graphdarstellung der GUI benötigt.
+         * @return selektierteKanten - Gibt alle Kanten als ArrayList zurück
+         */
 	public ArrayList<ArrayList<Integer>> selektierteKanten() {
 		ArrayList<ArrayList<Integer>> selektierteKanten = new ArrayList<ArrayList<Integer>>();
 		// Durchlaufe alle Zeilen und Spalten.
@@ -543,12 +757,7 @@ public class Matrix implements Serializable {
 					// Knoten-Nummern eingetragen werden sollen.
 					ArrayList<Integer> neueKante = new ArrayList<Integer>();
 					// Füge zuerst den Knoten mit der kleineren Nummer ein, dann
-					// jenen mit der größeren. Bin mir nicht sicher, aber da bei
-					// Listen die Ordnung eine Rolle spielt, könnten die Listen
-					// [1, 2] und [2, 1] als ungleich erkannt werden. Wollte
-					// keine Zeit verschwenden, um das genau zu überprüfen.
-					// neueKante.add(Math.min(row + 1, column + 1));
-					// neueKante.add(Math.min(column + 1, row + 1));
+					// jenen mit der größeren.
 					neueKante.add(Math.min(row + 1, column + 1));
 					neueKante.add(Math.max(column + 1, row + 1));
 
@@ -561,6 +770,10 @@ public class Matrix implements Serializable {
 		return selektierteKanten;
 	}
 
+	/**
+         * Gibt eine Liste aller Knoten zurück. Wird für die GUI benötigt.
+         * @return selektierteKnoten - Alle Knoten als ArrayList.
+         */
 	public ArrayList<Integer> selektierteKnoten() {
 		ArrayList<Integer> selektierteKnoten = new ArrayList<Integer>();
 		// Durchlaufe alle Zeilen und Spalten.
@@ -575,183 +788,16 @@ public class Matrix implements Serializable {
 					if (!selektierteKnoten.contains(row + 1)) {
 						selektierteKnoten.add(row + 1);
 					}
-
 					if (!selektierteKnoten.contains(column + 1)) {
 						selektierteKnoten.add(column + 1);
 					}
 				}
 			}
 		}
-		// sortiere die Liste von Knoten noch
+		// Sortiere die Liste von Knoten.
 		Collections.sort(selektierteKnoten);
 		return selektierteKnoten;
 	}
+
 	
-	public boolean hasOffeneEulerscheLinie() {
-		if (komponenten().size() > 1) {
-			return false;
-		}
-
-		int ungeradeGrade = 0;
-		for (int row = 0; row < getDimension(); row++) {
-			int kantenGrad = 0;
-			for (int column = 0; column < getDimension(); column++) {
-				if (values[row][column] == 1) {
-					kantenGrad++;
-				}
-			}
-			if (kantenGrad % 2 != 0) {
-				ungeradeGrade++;
-			}
-		}
-		return ungeradeGrade == 2;
-	}
-
-	public boolean hasGeschlosseneEulerscheLinie() {
-		if (komponenten().size() > 1) {
-			return false;
-		}
-
-		int ungeradeGrade = 0;
-		for (int row = 0; row < getDimension(); row++) {
-			int kantenGrad = 0;
-			for (int column = 0; column < getDimension(); column++) {
-				if (values[row][column] == 1) {
-					kantenGrad++;
-				}
-			}
-			if (kantenGrad % 2 != 0) {
-				ungeradeGrade++;
-			}
-		}
-		return ungeradeGrade == 0;
-	}
-
-	public ArrayList<ArrayList<Integer>> eulerWeg() {
-		// Wenn es keine Eulersche Linie gibt, dann gebe eine Fehlermeldung
-		// zurück.
-		if (!hasGeschlosseneEulerscheLinie() && !hasOffeneEulerscheLinie()) {
-			throw new IllegalArgumentException("Kein Eulerweg vorhanden!");
-		}
-
-		// Erstelle für jede Kante ihr Gegenstück (für jede Kante A-B eine Kante
-		// B-A), damit im Algorithmus alle möglichen Wege (mit Richtungen) zur
-		// Verfügung stehen.
-		ArrayList<ArrayList<Integer>> ungerichteteKanten = selektierteKanten();
-		ArrayList<ArrayList<Integer>> umgedrehteKanten = new ArrayList<ArrayList<Integer>>();
-		for (ArrayList<Integer> kante : ungerichteteKanten) {
-			ArrayList<Integer> umgedrehteKante = new ArrayList<Integer>();
-			// Nimm den letzten Knoten der alten Kante und füge ihn als ersten
-			// in die neue ein.
-			umgedrehteKante.add(kante.get(1));
-			// Nimm den ersten Knoten der alten Kante und füge ihn hinten in die
-			// neue ein (also als letzten).
-			umgedrehteKante.add(kante.get(0));
-			// Ergebnis: Kante A-B wurde in Kante B-A übersetzt. Die Kante wird
-			// in eine neue Liste eingefügt. Würde man sie in die selbe Liste
-			// einfügen, dann würde die Schleife die Kante später abarbeiten,
-			// wieder eine neue Kante erzeugen, man hätte eine Endlosschleife.
-			umgedrehteKanten.add(umgedrehteKante);
-		}
-		// Es wird eine weitere Liste erstellt, in welche beide Kantenmengen
-		// eingefügt werden.
-		ArrayList<ArrayList<Integer>> gerichteteBeideRichtungen = new ArrayList<ArrayList<Integer>>();
-		gerichteteBeideRichtungen.addAll(ungerichteteKanten);
-		gerichteteBeideRichtungen.addAll(umgedrehteKanten);
-
-		// Löse den Eulerweg mit vollständiger Enumeration der Kanten. Bei
-		// diesem Ansatz wird jede Kante mit jeder anderen kombiniert. Der erste
-		// Parameter ist die bisherige Lösung (die am Anfang leer ist), der
-		// zweite Parameter die Liste, der derzeit noch verfügbaren Kanten (das
-		// sind am Anfang alle).
-		return eulerWegRekursiv(new ArrayList<ArrayList<Integer>>(),
-				gerichteteBeideRichtungen);
-	}
-
-	// Rekursive Methode zur Berechnung des Eulerwegs.
-	private ArrayList<ArrayList<Integer>> eulerWegRekursiv(
-			ArrayList<ArrayList<Integer>> currentSolution,
-			ArrayList<ArrayList<Integer>> remainingEdges) {
-		// Durchlaufe alle verbleibenden Kanten. Die verbleibenden Kanten sind
-		// je nach den davor liegenden Aufrufen anders.
-		for (ArrayList<Integer> edge : remainingEdges) {
-			// Ist die aktuelle Lösung leer, dann füge die Kante auf jeden Fall
-			// ein. In jedem anderen Fall muss die Kante eine Verbindung zur
-			// letzten Kante der bisherigen Lösung haben.
-			if (currentSolution.size() == 0
-					|| currentSolution.get(currentSolution.size() - 1).get(1) == edge
-							.get(0)) {
-				// Die neue Lösung ist eine Kopie der alten Lösung, welche nun
-				// auch die neue Kante enthält.
-				ArrayList<ArrayList<Integer>> newSolution = new ArrayList<ArrayList<Integer>>(
-						currentSolution);
-				newSolution.add(edge);
-
-				// Wenn der Weg A-B genutzt worden ist, dann fällt auch sein
-				// Gegenstück B-A aus der Menge gangbarer Wege, entferne die
-				// Kante ebenfalls aus der Menge verfügbarer Kanten.
-				ArrayList<Integer> oppositeEdge = new ArrayList<Integer>();
-				oppositeEdge.add(edge.get(1));
-				oppositeEdge.add(edge.get(0));
-
-				// Die neuen verbleibenden Kanten sind die alten verbleibenden
-				// Kanten ohne der gerade zur Lösung hinzugefügten Kante.
-				ArrayList<ArrayList<Integer>> newRemainingEdges = new ArrayList<ArrayList<Integer>>(
-						remainingEdges);
-
-				newRemainingEdges.remove(edge);
-				newRemainingEdges.remove(oppositeEdge);
-
-				// Berechne den nächsten Schritt rekursiv und merke, was zurück
-				// gegeben wird.
-				ArrayList<ArrayList<Integer>> nextSolution = eulerWegRekursiv(
-						newSolution, newRemainingEdges);
-				// Eine Lösung wurde gefunden, wenn die Lösung so groß ist, wie
-				// die Größe der aktuellen Lösung plus die Anzahl der Hälfte der
-				// derzeit verbleibenden Kanten - das liegt daran, dass für jede
-				// ungerichtete Kante im Graphen zwei gerichtete erstellt worden
-				// sind. Beim Hinzufügen einer Kante zur Lösung fallen aus den
-				// verbleibenden immer 2 Kanten weg.
-				if (nextSolution.size() == currentSolution.size()
-						+ remainingEdges.size() / 2) {
-					// Falls eine Lösung gefunden worden ist, dann gebe sie
-					// zurück. Wurde keine gefunden, dann rücke zur nächsten
-					// Kante vor und kombiniere neu.
-					return nextSolution;
-				}
-			}
-		}
-
-		// Wurde keine vollständige Lösung gefunden, dann gebe einfach zurück,
-		// womit die Methode aufgerufen worden ist (was als unvollständige
-		// Lösung erkannt werden sollte).
-		return currentSolution;
-	}
-
-	@Override
-	public String toString() {
-		// Stringbuilder werden empfohlen, um Text effizienter zu verarbeiten.
-		// So wird die + Operation des Strings vermieden, welche viele Kopien
-		// von Texten im Speicher anlegt.
-		StringBuilder sb = new StringBuilder().append(
-				getClass().getSimpleName()).append("\ndimension = ").append(
-				DEFAULT_SIZE).append("\nvalues = {\n");
-		// Durchlaufe alle Zeilen und Spalten und hänge jeweils den Wert für die
-		// aktuelle Spalte an.
-		for (int row = 0; row < values.length; row++) {
-			sb.append("{");
-			// Durchlaufe alle Spalten bis zur vorletzten.
-			for (int column = 0; column < values[row].length - 1; column++) {
-				// Hänge den Wert an, gefolgt von einem Beistrich.
-				sb.append(values[row][column]).append(", ");
-			}
-			// Die letzte Spalte wird ohne folgendem Beistrich ausgegeben.
-			if (values[row].length > 0) {
-				sb.append(values[row][values[row].length - 1]);
-			}
-			sb.append("}\n");
-		}
-		return sb.append("}").toString();
-	}
-
 }

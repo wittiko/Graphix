@@ -102,6 +102,16 @@ public class CalculationPanel extends JPanel {
                 {
                     text += "Block " + (i + 1) + ": " + bloecke.get(i) + "<br>";
                 }
+                if(matrix.isBaum())
+                {
+                    text += "<p>" + "<b>BAUM:</b><br>";
+                    text += "Der Graph ist ein Baum" + "<br>";
+                }
+                if(matrix.isWald())
+                {
+                    text += "<p>" + "<b>WALT:</b><br>";
+                    text += "Der Graph ist ein Wald" + "<br>";
+                }
                 
                 
 		text += "<p>";
