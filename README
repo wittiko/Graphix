@@ -1,0 +1,20 @@
+README GRAPHIX
+
+Dieses Programm wurde im Rahmen des Unterrichts im Fach LOAL geschrieben.
+Es ist in der Lage aus der Adjazenzmatrix die Wegmatrix sowie die Distanzmatrix zu berechnen.
+Weiters wird der Graph visulaisiert.
+Folgende Alorithmen sind implementiert:
+x) Blöcke
+x) Brücken
+x) Komponenten
+x) Artikulationen
+x) Radius
+x) Durchmesser
+x) Exzentriäten
+x) Wald
+x) Baum
+x) Knotengrade
+x) Kantenanzahl
+
+Das gesamte Programm sowie jeder Teil des Source Codes darf von jedem verwendet werden.
+Dieses Programm wurde von Gregor Messner programmiert.
