@@ -10,13 +10,16 @@ import java.io.ObjectOutputStream;
 
 import at.htlv.messner.graphix.model.Matrix;
 
-public class FileHelper {
+public class FileHelper 
+{
 
-	private FileHelper() {
+	private FileHelper() 
+        {
 	}
 
 	public static Matrix load(File file) throws FileNotFoundException,
-			IOException, ClassNotFoundException {
+			IOException, ClassNotFoundException 
+        {
 		ObjectInputStream in = new ObjectInputStream(new FileInputStream(file));
 
 		Matrix loaded = (Matrix) in.readObject();
@@ -26,7 +29,8 @@ public class FileHelper {
 	}
 
 	public static void save(File file, Matrix m)
-			throws FileNotFoundException, IOException {
+			throws FileNotFoundException, IOException 
+        {
 		ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(
 				file));
 		out.writeObject(m);

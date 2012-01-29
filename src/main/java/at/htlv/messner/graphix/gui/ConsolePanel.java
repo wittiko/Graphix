@@ -11,16 +11,19 @@ import javax.swing.JTextPane;
 import at.htlv.messner.graphix.model.Matrix;
 
 
-public class ConsolePanel extends JPanel {
+public class ConsolePanel extends JPanel 
+{
 
 	private static final long serialVersionUID = 8320890127120058410L;
 	private static JTextPane textPane;
 
-	public ConsolePanel() {
+	public ConsolePanel() 
+        {
 		initPanels();
 	}
 
-	public void initPanels() {
+	public void initPanels() 
+        {
 		setLayout(new BorderLayout());
 		textPane = new JTextPane();
 		textPane.setBackground(new Color(250, 250, 250));
@@ -29,11 +32,13 @@ public class ConsolePanel extends JPanel {
 		add(scrollPane, BorderLayout.CENTER);
 	}
 
-	public void clear() {
+	public void clear() 
+        {
 		textPane.setText("");
 	}
 
-	public void updateWith(Matrix matrix) {
+	public void updateWith(Matrix matrix) 
+        {
 
 		String text = "<font size =3 face=Fixedsys>";
 		text += "<p>" + "<b>Matrix:</b><br>";

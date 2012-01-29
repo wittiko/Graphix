@@ -1,20 +1,19 @@
 package at.htlv.messner.graphix.gui;
 
+import at.htlv.messner.graphix.model.Matrix;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 
-import at.htlv.messner.graphix.model.Matrix;
-
-public class MatrixPanel extends JPanel {
+public class MatrixPanel extends JPanel 
+{
 	private static final long serialVersionUID = -6858830340288094707L;
 
 	private JButton[][] buttons = new JButton[15][15];
@@ -29,14 +28,16 @@ public class MatrixPanel extends JPanel {
 
 	private Matrix currentMatrix;
 
-	public MatrixPanel(String title, Matrix matrix, boolean editable,
-			boolean enableDiagonal) {
-		if (title == null || title.isEmpty()) {
+	public MatrixPanel(String title, Matrix matrix, boolean editable, boolean enableDiagonal) 
+        {
+		if (title == null || title.isEmpty()) 
+                {
 			throw new IllegalArgumentException(
 					"expected: title.length > 0, actual: " + title);
 		}
 
-		if (matrix == null) {
+		if (matrix == null) 
+                {
 			throw new IllegalArgumentException(
 					"expected: matrix != null, actual: " + matrix);
 		}
@@ -47,22 +48,27 @@ public class MatrixPanel extends JPanel {
 		this.enableDiagonal = enableDiagonal;
 
 		add(new JLabel());
-		for (int column = 0; column < buttons[0].length; column++) {
+		for (int column = 0; column < buttons[0].length; column++) 
+                {
 			add(new JLabel(String.format("%02d", column + 1)));
 		}
 
-		for (int row = 0; row < buttons.length; row++) {
+		for (int row = 0; row < buttons.length; row++) 
+                {
 			add(new JLabel(String.format("%02d", row + 1)));
-			for (int column = 0; column < buttons[row].length; column++) {
+			for (int column = 0; column < buttons[row].length; column++) 
+                        {
 				add(buttons[row][column] = new JButton());
 				buttons[row][column].setBorder(new EtchedBorder());
 
 				final int r = row;
 				final int c = column;
 
-				if (editable) {
+				if (editable) 
+                                {
 					buttons[row][column]
-							.addActionListener(new ActionListener() {
+							.addActionListener(new ActionListener() 
+                                                        {
 								@Override
 								public void actionPerformed(ActionEvent e) {
 									value[r][c] = (value[r][c] + 1) % 2;
@@ -88,52 +94,70 @@ public class MatrixPanel extends JPanel {
 		update(true);
 	}
 
-	public void updateSize(int dimension) {
+	public void updateSize(int dimension) 
+        {
 		updateWith(new Matrix(dimension), false);
 	}
 
-	private void update(boolean updateSelection) {
-		if (updateSelection) {
+	private void update(boolean updateSelection) 
+        {
+		if (updateSelection) 
+                {
 			value = new int[15][15];
 		}
 
-		for (int row = 0; row < buttons.length; row++) {
-			for (int column = 0; column < buttons[row].length; column++) {
+		for (int row = 0; row < buttons.length; row++) 
+                {
+			for (int column = 0; column < buttons[row].length; column++) 
+                        {
 
-				if (row == column && !enableDiagonal) {
+				if (row == column && !enableDiagonal) 
+                                {
 					setEnabled(false);
 				}
 
 				if (row < currentMatrix.getDimension()
-						&& column < currentMatrix.getDimension()) {
-					if (updateSelection) {
+						&& column < currentMatrix.getDimension()) 
+                                {
+					if (updateSelection) 
+                                        {
 						value[row][column] = currentMatrix.getValueAt(row,
 								column);
 					}
 
-					if (row == column && !enableDiagonal) {
+					if (row == column && !enableDiagonal) 
+                                        {
 						buttons[row][column].setBackground(notSelectableColor);
 						buttons[row][column]
 								.setText("<html><font color = white>0</font/></html>");
-					} else {
+					} 
+                                        else 
+                                        {
 						buttons[row][column].setEnabled(true);
 						buttons[row][column]
 								.setBackground(value[row][column] == 0 ? unselectedColor
 										: selectedColor);
-						if (value[row][column] == Integer.MIN_VALUE) {
+						if (value[row][column] == Integer.MIN_VALUE) 
+                                                {
 							buttons[row][column]
 									.setText("<html>&infin;</html>");
 							buttons[row][column].setBackground(unselectedColor);
-						} else if (value[row][column] > 99) {
+						} 
+                                                else if (value[row][column] > 99) 
+                                                {
 							buttons[row][column].setText("<html>##</html>");
 							buttons[row][column].setBackground(selectedColor);
 
-						} else {
+						}
+                                                else 
+                                                {
 							buttons[row][column].setText("<html>"
 									+ value[row][column] + "</html>");
 						}
 					}
-				} else {
+				}
+                                else 
+                                {
 					buttons[row][column].setEnabled(false);
 					buttons[row][column].setBackground(disabledColor);
 					buttons[row][column].setText("<html></html>");
@@ -148,8 +172,10 @@ public class MatrixPanel extends JPanel {
 		}
 	}
 
-	public void updateWith(Matrix matrix, boolean updateSelection) {
-		if (matrix == null) {
+	public void updateWith(Matrix matrix, boolean updateSelection) 
+        {
+		if (matrix == null) 
+                {
 			throw new IllegalArgumentException(
 					"expected: matrix != null, actual: " + matrix);
 		}
@@ -160,34 +186,42 @@ public class MatrixPanel extends JPanel {
 	}
 
 	@Override
-	public Dimension getSize() {
+	public Dimension getSize() 
+        {
 		return new Dimension(305, 305);
 	}
 
 	@Override
-	public Dimension getMaximumSize() {
+	public Dimension getMaximumSize() 
+        {
 		return getSize();
 	}
 
 	@Override
-	public Dimension getMinimumSize() {
+	public Dimension getMinimumSize() 
+        {
 		return getSize();
 	}
 
 	@Override
-	public Dimension getPreferredSize() {
+	public Dimension getPreferredSize() 
+        {
 		return getSize();
 	}
 
-	public Matrix getCurrentMatrix() {
+	public Matrix getCurrentMatrix() 
+        {
 		int dimension = 0;
 		for (int i = 0; i < buttons.length
-				&& buttons[i][i].getBackground() == notSelectableColor; dimension = ++i) {
+				&& buttons[i][i].getBackground() == notSelectableColor; dimension = ++i) 
+                {
 		}
 
 		Matrix currentMatrix = new Matrix(dimension);
-		for (int row = 0; row < dimension; row++) {
-			for (int column = 0; column < dimension; column++) {
+		for (int row = 0; row < dimension; row++) 
+                {
+			for (int column = 0; column < dimension; column++) 
+                        {
 				currentMatrix.setValueAt(row, column, value[row][column]);
 			}
 		}
@@ -195,43 +229,52 @@ public class MatrixPanel extends JPanel {
 		return currentMatrix;
 	}
 
-	public Color getSelectedColor() {
+	public Color getSelectedColor() 
+        {
 		return selectedColor;
 	}
 
-	public void setSelectedColor(Color selectedColor) {
+	public void setSelectedColor(Color selectedColor) 
+        {
 		this.selectedColor = selectedColor;
 		update(false);
 	}
 
-	public Color getUnselectedColor() {
+	public Color getUnselectedColor() 
+        {
 		return unselectedColor;
 	}
 
-	public void setUnselectedColor(Color unselectedColor) {
+	public void setUnselectedColor(Color unselectedColor) 
+        {
 		this.unselectedColor = unselectedColor;
 		update(false);
 	}
 
-	public Color getNotSelectableColor() {
+	public Color getNotSelectableColor() 
+        {
 		return notSelectableColor;
 	}
 
-	public void setNotSelectableColor(Color notSelectableColor) {
+	public void setNotSelectableColor(Color notSelectableColor) 
+        {
 		this.notSelectableColor = notSelectableColor;
 		update(false);
 	}
 
-	public Color getDisabledColor() {
+	public Color getDisabledColor() 
+        {
 		return disabledColor;
 	}
 
-	public void setDisabledColor(Color disabledColor) {
+	public void setDisabledColor(Color disabledColor) 
+        {
 		this.disabledColor = disabledColor;
 		update(false);
 	}
 
-	public void setTitle(String title) {
+	public void setTitle(String title) 
+        {
 		border.setTitle(title);
 		repaint();
 	}

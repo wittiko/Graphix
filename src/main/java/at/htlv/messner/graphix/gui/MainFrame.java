@@ -1,5 +1,7 @@
 package at.htlv.messner.graphix.gui;
 
+import at.htlv.messner.graphix.model.Matrix;
+import at.htlv.messner.graphix.util.FileHelper;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Image;
@@ -11,26 +13,11 @@ import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JSlider;
-import javax.swing.JTabbedPane;
-import javax.swing.JToolBar;
-import javax.swing.SwingConstants;
+import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-
 import net.miginfocom.swing.MigLayout;
-import at.htlv.messner.graphix.model.Matrix;
-import at.htlv.messner.graphix.util.FileHelper;
 
 public class MainFrame extends JFrame {
 	private static final long serialVersionUID = -8933400712100861899L;
@@ -46,31 +33,38 @@ public class MainFrame extends JFrame {
 	private MonitoringPanel monitoringPanel;
 	private JSlider sizeSlider;
 
-	public MainFrame() throws IOException {
+	public MainFrame() throws IOException 
+        {
 		setSize(950, 740);
 
 		setTitle(APPLICATION_TITLE);
 		setLocationByPlatform(true);
 		setDefaultLookAndFeelDecorated(true);
 
-		try {
+		try 
+                {
 			Image icon = Toolkit.getDefaultToolkit().getImage(
 					File.class.getResource("/icons/app.png"));
 			setIconImage(icon);
-		} catch (Exception e) {
+		} 
+                catch (Exception e) 
+                {
 		}
 
 		setLayout(new MigLayout("filly", "[][grow]"));
 		initPanels();
-		addWindowListener(new WindowAdapter() {
-			public void windowClosing(WindowEvent evt) {
+		addWindowListener(new WindowAdapter() 
+                {
+			public void windowClosing(WindowEvent evt) 
+                        {
 				dialogBeenden();
 			}
 		});
 
 	}
 
-	private void initPanels() {
+	private void initPanels() 
+        {
 		JToolBar calculationToolbar = new JToolBar("Toolbar",
 				JToolBar.HORIZONTAL);
 		calculationToolbar.setLayout(new MigLayout());
@@ -84,7 +78,8 @@ public class MainFrame extends JFrame {
 		sizeSlider.setPaintTicks(false);
 		sizeSlider.setPaintLabels(true);
 		sizeSlider.setSnapToTicks(true);
-		sizeSlider.addChangeListener(new ChangeListener() {
+		sizeSlider.addChangeListener(new ChangeListener() 
+                {
 			@Override
 			public void stateChanged(ChangeEvent e) {
 				Matrix inputMatrix = matrixPanel.getCurrentMatrix();
@@ -99,9 +94,11 @@ public class MainFrame extends JFrame {
 
 		JButton calcButton = new JButton(
 				"<html><center><font size = 4>Berechnen</font><br><font size = 2>aktualisieren</font></html>");
-		calcButton.addActionListener(new ActionListener() {
+		calcButton.addActionListener(new ActionListener() 
+                {
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(ActionEvent e) 
+                        {
 				Matrix inputMatrix = matrixPanel.getCurrentMatrix();
 				distancePanel.updateWith(inputMatrix.distanzMatrix(), true);
 				pathPanel.updateWith(inputMatrix.wegMatrix(), true);
@@ -125,7 +122,8 @@ public class MainFrame extends JFrame {
 		JButton refreshButton = new JButton(
 				"<html><center><font size = 4>Rücksetzen<br><font size = 2>löschen</font></html>");
 		refreshButton.setOpaque(false);
-		refreshButton.addActionListener(new ActionListener() {
+		refreshButton.addActionListener(new ActionListener() 
+                {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				Matrix blankDefaultMatrix = new Matrix();
@@ -144,9 +142,11 @@ public class MainFrame extends JFrame {
 				"/icons/exit2.png")));
 		exitButton.setOpaque(false);
 		calculationToolbar.add(exitButton, "gapx 5");
-		exitButton.addActionListener(new ActionListener() {
+		exitButton.addActionListener(new ActionListener() 
+                {
 			@Override
-			public void actionPerformed(ActionEvent arg0) {
+			public void actionPerformed(ActionEvent arg0) 
+                        {
 				dialogBeenden();
 			}
 		});
@@ -159,13 +159,17 @@ public class MainFrame extends JFrame {
 
 		JButton openButton = new JButton(new ImageIcon(getClass().getResource(
 				"/icons/open.png")));
-		openButton.addActionListener(new ActionListener() {
+		openButton.addActionListener(new ActionListener() 
+                {
 			@Override
-			public void actionPerformed(ActionEvent arg0) {
+			public void actionPerformed(ActionEvent arg0) 
+                        {
 				JFileChooser dialog = new JFileChooser(new File("."));
 
-				if (dialog.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
-					try {
+				if (dialog.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) 
+                                {
+					try 
+                                        {
 						Matrix loaded = FileHelper.load(dialog
 								.getSelectedFile());
 						sizeSlider.setValue(loaded.getDimension());
@@ -173,14 +177,20 @@ public class MainFrame extends JFrame {
 						matrixPanel.updateWith(loaded, true);
 						distancePanel.updateWith(new Matrix(0), true);
 						pathPanel.updateWith(new Matrix(0), true);
-					} catch (FileNotFoundException e) {
+					} 
+                                        catch (FileNotFoundException e) 
+                                        {
 						JOptionPane
 								.showMessageDialog(null,
 										"Bitte wählen Sie eine existierende Datei aus.");
-					} catch (IOException e) {
+					} 
+                                        catch (IOException e) 
+                                        {
 						JOptionPane.showMessageDialog(null,
 								"Fehler beim Einlesen der Matrize.");
-					} catch (ClassNotFoundException e) {
+					}
+                                        catch (ClassNotFoundException e) 
+                                        {
 						JOptionPane
 								.showMessageDialog(null,
 										"Unbekannter Inhalt. Datei konnte nicht verarbeitet werden.");
@@ -192,20 +202,28 @@ public class MainFrame extends JFrame {
 
 		JButton saveButton = new JButton(new ImageIcon(getClass().getResource(
 				"/icons/save.png")));
-		saveButton.addActionListener(new ActionListener() {
+		saveButton.addActionListener(new ActionListener() 
+                {
 			@Override
-			public void actionPerformed(ActionEvent arg0) {
+			public void actionPerformed(ActionEvent arg0) 
+                        {
 				JFileChooser dialog = new JFileChooser(new File("."));
 
-				if (dialog.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
-					try {
+				if (dialog.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) 
+                                {
+					try 
+                                        {
 						FileHelper.save(dialog.getSelectedFile(), matrixPanel
 								.getCurrentMatrix());
-					} catch (FileNotFoundException e) {
+					}
+                                        catch (FileNotFoundException e) 
+                                        {
 						JOptionPane
 								.showMessageDialog(null,
 										"Bitte wählen Sie eine existierende Datei aus.");
-					} catch (IOException e) {
+					}
+                                        catch (IOException e) 
+                                        {
 						e.printStackTrace();
 						JOptionPane.showMessageDialog(null,
 								"Fehler beim Speichern der Matrize.");
@@ -219,9 +237,11 @@ public class MainFrame extends JFrame {
 				"/icons/info2.png")));
 		infoButton.setOpaque(false);
 		calculationToolbar.add(infoButton, "gapx 2");
-		infoButton.addActionListener(new ActionListener() {
+		infoButton.addActionListener(new ActionListener() 
+                {
 			@Override
-			public void actionPerformed(ActionEvent arg0) {
+			public void actionPerformed(ActionEvent arg0) 
+                        {
 				getApplicationInfo();
 			}
 		});
@@ -255,16 +275,19 @@ public class MainFrame extends JFrame {
 		add(tabbedPane, "grow");
 	}
 
-	private void getApplicationInfo() {
+	private void getApplicationInfo() 
+        {
 		JOptionPane.showMessageDialog(null, appInfo, "Information",
 				JOptionPane.PLAIN_MESSAGE);
 	}
 
-	private void dialogBeenden() {
+	private void dialogBeenden() 
+        {
 		String msg = "Möchten Sie " + APPLICATION_TITLE + " beenden?";
 		int returnVal = JOptionPane.showConfirmDialog(this, msg,
 				"Bitte bestätigen", JOptionPane.YES_NO_OPTION);
-		if (returnVal == JOptionPane.YES_OPTION) {
+		if (returnVal == JOptionPane.YES_OPTION) 
+                {
 			dispose();
 		}
 	}

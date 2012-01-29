@@ -109,7 +109,7 @@ public class CalculationPanel extends JPanel {
                 }
                 if(matrix.isWald())
                 {
-                    text += "<p>" + "<b>WALT:</b><br>";
+                    text += "<p>" + "<b>WALD:</b><br>";
                     text += "Der Graph ist ein Wald" + "<br>";
                 }
                 
